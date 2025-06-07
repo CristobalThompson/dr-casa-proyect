@@ -10,7 +10,7 @@
 
 typedef struct{
     int id;
-    int tiempoVida
+    int tiempoVida;
     char enfermedad[300];
     List* sintomas;
 }paciente;

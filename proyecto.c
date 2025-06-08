@@ -18,7 +18,7 @@ typedef struct{
 typedef struct{
     int id;
     int tiempoVida;
-    Enfermedad Enfermedad;
+    Enfermedad enfermedad;
 }Paciente;
 
 typedef struct{

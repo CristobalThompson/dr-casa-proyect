@@ -13,6 +13,7 @@ typedef struct{
     char nombre[100];
     List* sintomas;
     char cura[100];
+    List* enfermedadesAdj;
 }Enfermedad;
 
 typedef struct{

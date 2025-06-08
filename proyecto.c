@@ -8,26 +8,25 @@
 
 // Structs
 
+
+typedef struct{
+    char nombre[100];
+    List* sintomas;
+    char cura[100];
+}Enfermedad;
+
 typedef struct{
     int id;
-    int tiempoVida
-    char enfermedad[300];
-    List* sintomas;
-}paciente;
+    int tiempoVida;
+    Enfermedad Enfermedad;
+}Paciente;
 
 typedef struct{
     char nombre[100];
     char descripcion[300];
     List* sintomasCura;
     List* sintomasSecundarios;
-}medicamento;
-
-
-typedef struct{
-    char nombre[100];
-    List* sintomas;
-    char cura[100];
-}enfermedad;
+}Medicamento;
 
 
 

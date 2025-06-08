@@ -18,8 +18,14 @@ typedef struct{
 typedef struct{
     int id;
     int tiempoVida;
+<<<<<<< HEAD
     Enfermedad Enfermedad;
 }Paciente;
+=======
+    char enfermedad[300];
+    List* sintomas;
+}paciente;
+>>>>>>> d141d0eb5b368e3ab38256d73cbadf454542b83d
 
 typedef struct{
     char nombre[100];

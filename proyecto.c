@@ -32,8 +32,15 @@ typedef struct{
 
 //FUNCIONES
 
+void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, List* aux){
+    return;
+}
 
 int main(){
+
+    HashMap* enfermedades = createMap(250);
+    HashMap* medicamentos = createMap(250);
+    List* listaAux = create_List();
 
     char buffer[10];
     char opcion;
@@ -47,6 +54,7 @@ int main(){
 
             case '1' :
                 //cargar datos
+                //cargar_CSVS(enfermedades, medicamentos, listaAux);
                 break;
             case '2' :
                 //???

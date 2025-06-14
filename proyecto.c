@@ -33,13 +33,13 @@ typedef struct{
 //FUNCIONES
 
 void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, List* aux){
-    File *archivoMedicamentos = fopen("data/medicamentos.csv", "r");
-    if (archivo === NULL){
+    FILE *archivoMedicamentos = fopen("data/medicamentos.csv", "r");
+    if (archivoMedicamentos == NULL){
         perror("Error al abrir medicamentos");
         return;
     }
 
-    char **campos,
+    char **campos;
 
     campos = leer_linea_csv(archivoMedicamentos, ',');
 
@@ -56,8 +56,9 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, List* aux){
         medicamento->descripcion[sizeof(medicamento->descripcion) - 1] = '\0';
         //-------------------------------------FIN------------------------------------------
 
-        
+        printf("%s\n%s\n\n", medicamento->nombre, medicamento->descripcion);
     }
+    fclose(archivoMedicamentos);
 
 
     return;

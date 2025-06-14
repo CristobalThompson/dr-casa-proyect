@@ -83,8 +83,8 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, List* aux){
           waza = (Pair*) nextMap(medicamentos);
           ++contador2;
     }
-
-    FILE *archivoEnfermedades = open("data/enfermedades.csv", "r");
+    contador = 1;
+    FILE *archivoEnfermedades = fopen("data/enfermedades.csv", "r");
     if (archivoEnfermedades == NULL){
         perror("Error al abrir enfermedades");
         return;
@@ -93,7 +93,8 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, List* aux){
     campos = leer_linea_csv(archivoEnfermedades, ',');
     while((campos = leer_linea_csv(archivoEnfermedades, ',')) != NULL){
         Enfermedad* enfermedad = malloc(sizeof(Enfermedad)); if (enfermedad == NULL) exit(1);
-        
+        enfermedad->enfermedadesAdj = create_List();
+
         //-------------------------------copiar cadenas-------------------------------------
         strncpy(enfermedad->nombre, campos[0], sizeof(enfermedad->nombre) - 1);
         enfermedad->nombre[sizeof(enfermedad->nombre) - 1] = '\0';
@@ -102,6 +103,18 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, List* aux){
         enfermedad->cura[sizeof(enfermedad->cura) - 1] = '\0';
         //-------------------------------------FIN------------------------------------------
 
+        enfermedad->sintomas = split_string(campos[1], ";");
+
+        if (contador <= 5) {
+            printf("%s\n%s\n\n", enfermedad->nombre, enfermedad->cura);
+            for(char *sintoma = first_List(enfermedad->sintomas); sintoma != NULL; 
+                sintoma = next_List(enfermedad->sintomas)){
+                printf("sintoma: '%s'\n", sintoma);
+          }
+          printf("\n\n");
+        }
+        contador++;
+        insertMap(enfermedades, strdup(enfermedad->nombre), enfermedad);
     }
     fclose(archivoEnfermedades);
 

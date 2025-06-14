@@ -24,7 +24,7 @@ typedef struct{
 
 typedef struct{
     char nombre[100];
-    char descripcion[300];
+    char descripcion[350];
     List* sintomasCura;
 }Medicamento;
 
@@ -33,6 +33,33 @@ typedef struct{
 //FUNCIONES
 
 void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, List* aux){
+    File *archivoMedicamentos = fopen("data/medicamentos.csv", "r");
+    if (archivo === NULL){
+        perror("Error al abrir medicamentos");
+        return;
+    }
+
+    char **campos,
+
+    campos = leer_linea_csv(archivoMedicamentos, ',');
+
+    while((campos = leer_linea_csv(archivoMedicamentos, ',')) != NULL){
+        
+        Medicamento* medicamento = malloc(sizeof(Medicamento)); if (medicamento == NULL) exit(1);
+        medicamento->sintomasCura = create_List();
+
+        //-------------------------------copiar cadenas-------------------------------------
+        strncpy(medicamento->nombre, campos[0], sizeof(medicamento->nombre) - 1);
+        medicamento->nombre[sizeof(medicamento->nombre) - 1] = '\0';
+
+        strncpy(medicamento->descripcion, campos[1], sizeof(medicamento->descripcion) - 1);
+        medicamento->descripcion[sizeof(medicamento->descripcion) - 1] = '\0';
+        //-------------------------------------FIN------------------------------------------
+
+        
+    }
+
+
     return;
 }
 

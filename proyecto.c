@@ -66,9 +66,23 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, List* aux){
           printf("\n\n");
         }
         contador++;
+        insertMap(medicamentos, strdup(medicamento->nombre), medicamento);
     }
     fclose(archivoMedicamentos);
-
+    int contador2 = 1;
+    Pair* waza = (Pair*) firstMap(medicamentos);
+    while(waza != NULL && contador2 <= 5){
+        Medicamento* pos = waza->value;
+        printf("Nodo del mapa\n");
+        printf("%s\n%s\n\n", pos->nombre, pos->descripcion);
+        for(char *sintoma = first_List(pos->sintomasCura); sintoma != NULL; 
+                sintoma = next_List(pos->sintomasCura)){
+                printf("sintoma: '%s'\n", sintoma);
+          }
+          printf("\n\n");
+          waza = (Pair*) nextMap(medicamentos);
+          ++contador2;
+    }
 
     return;
 }

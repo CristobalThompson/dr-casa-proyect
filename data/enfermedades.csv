@@ -1,101 +1,101 @@
-id,nombre,sintomas,medicamento
-100,Tuberculosis 891,erupciones;dolor articular,Amoxicilina solucion oral
-101,Tuberculosis 158,dolor articular;dolor muscular;fatiga,Metformina solucion oral
-102,Neumonia 421,perdida de apetito,Insulina 500mg
-103,Sinusitis 245,dolor muscular;tos;mareo;inflamacion,Cetirizina 500mg
-104,Bronquitis 744,fiebre,Amoxicilina solucion oral
-105,Neumonia 353,inflamacion;nauseas;diarrea,Amoxicilina 500mg
-106,Gripe 829,mareo;fatiga,Amoxicilina 500mg
-107,Gripe 784,dolor articular;inflamacion;fatiga;dolor de cabeza,Ibuprofeno 1g
-108,Migrana 286,mareo;fiebre;dolor articular;dolor de cabeza,Losartan solucion oral
-109,Covid-19 614,vomitos,Salbutamol 500mg
-110,Covid-19 462,fiebre;dolor articular,Insulina comprimidos
-111,Dermatitis 202,escalofrios;dolor articular;erupciones,Prednisona comprimidos
-112,Gastritis 80,inflamacion,Insulina 1g
-113,Tuberculosis 964,fatiga;perdida de apetito;dolor articular,Amoxicilina comprimidos
-114,Bronquitis 771,erupciones,Cetirizina comprimidos
-115,Dermatitis 880,diarrea;escalofrios;tos;inflamacion,Losartan 1g
-116,Gastritis 817,dificultad para respirar;dolor de cabeza;dolor articular;fatiga,Losartan comprimidos
-117,Artritis 15,perdida de apetito;fatiga,Cetirizina comprimidos
-118,Hepatitis 566,dolor articular,Amoxicilina 1g
-119,Hepatitis 430,dolor abdominal;inflamacion,Metformina 1g
-120,Migrana 188,dolor articular;fiebre,Amoxicilina 500mg
-121,Meningitis 970,fiebre,Insulina comprimidos
-122,Diabetes 18,dificultad para respirar,Omeprazol comprimidos
-123,Dermatitis 128,dificultad para respirar;erupciones,Omeprazol solucion oral
-124,Tuberculosis 15,fiebre;dolor articular;dolor muscular,Cetirizina 500mg
-125,Artritis 409,dolor de cabeza;diarrea;erupciones;tos,Salbutamol 500mg
-126,Otitis 929,dolor abdominal,Insulina solucion oral
-127,Hepatitis 777,mareo;dolor articular;escalofrios;dificultad para respirar,Ibuprofeno 1g
-128,Tuberculosis 473,dificultad para respirar;dolor articular;dolor de cabeza,Prednisona 500mg
-129,Covid-19 894,dolor articular;vomitos,Aciclovir 1g
-130,Asma 578,dificultad para respirar;dolor muscular;fatiga,Salbutamol solucion oral
-131,Cistitis 166,dolor de cabeza;inflamacion;escalofrios,Losartan solucion oral
-132,Artritis 844,dolor de cabeza;mareo;inflamacion,Insulina 500mg
-133,Diabetes 11,fiebre;dolor muscular;mareo,Metformina 1g
-134,Meningitis 429,erupciones;diarrea;tos,Amoxicilina solucion oral
-135,Hipertension 364,erupciones;dolor de cabeza;fiebre;dolor abdominal,Prednisona solucion oral
-136,Gripe 6,nauseas;vomitos,Prednisona solucion oral
-137,Asma 502,dolor de cabeza;diarrea;mareo,Azitromicina solucion oral
-138,Hipertension 646,dolor muscular;dolor articular,Insulina 1g
-139,Hepatitis 67,fiebre;dolor muscular;inflamacion,Salbutamol 1g
-140,Gripe 223,mareo;fatiga,Amoxicilina 500mg
-141,Diabetes 183,dolor de cabeza;inflamacion,Omeprazol solucion oral
-142,Asma 123,inflamacion;dolor muscular;mareo,Cetirizina 500mg
-143,Bronquitis 350,tos,Azitromicina solucion oral
-144,Bronquitis 681,fiebre,Omeprazol 500mg
-145,Bronquitis 998,inflamacion,Prednisona 1g
-146,Migrana 417,dolor muscular;dificultad para respirar;nauseas,Amoxicilina solucion oral
-147,Hepatitis 803,inflamacion,Ibuprofeno 1g
-148,Psoriasis 150,perdida de apetito;tos,Aciclovir 1g
-149,Otitis 479,dolor de cabeza,Ibuprofeno solucion oral
-150,Artritis 978,erupciones;diarrea,Losartan 500mg
-151,Hepatitis 436,escalofrios;dificultad para respirar;tos,Prednisona comprimidos
-152,Tuberculosis 318,tos;dolor abdominal;nauseas;dolor articular,Omeprazol solucion oral
-153,Influenza 806,perdida de apetito;dolor abdominal,Prednisona 1g
-154,Migrana 148,nauseas,Insulina comprimidos
-155,Covid-19 48,dolor de cabeza;fatiga;nauseas;perdida de apetito,Salbutamol 500mg
-156,Migrana 801,dolor de cabeza;escalofrios;tos,Paracetamol 1g
-157,Gastritis 924,dolor abdominal;nauseas;dolor muscular;dolor de cabeza,Losartan 1g
-158,Diabetes 283,dolor articular;mareo;escalofrios,Prednisona 1g
-159,Bronquitis 200,erupciones,Losartan solucion oral
-160,Gastritis 79,mareo;nauseas,Insulina solucion oral
-161,Cistitis 786,mareo,Prednisona solucion oral
-162,Cistitis 517,tos;fiebre;mareo;dolor muscular,Cetirizina 1g
-163,Tuberculosis 448,fatiga;tos;erupciones,Salbutamol solucion oral
-164,Psoriasis 386,mareo;dolor abdominal;escalofrios,Azitromicina 500mg
-165,Covid-19 377,inflamacion;erupciones;nauseas;dolor articular,Paracetamol solucion oral
-166,Covid-19 651,nauseas;dolor abdominal;erupciones;inflamacion,Salbutamol 500mg
-167,Neumonia 311,escalofrios;erupciones,Prednisona comprimidos
-168,Covid-19 826,escalofrios;erupciones;nauseas,Salbutamol solucion oral
-169,Sinusitis 382,perdida de apetito;escalofrios;mareo,Prednisona 500mg
-170,Otitis 919,dolor muscular;dolor articular;diarrea;nauseas,Salbutamol 1g
-171,Gripe 131,mareo,Azitromicina comprimidos
-172,Sinusitis 875,perdida de apetito;vomitos;tos;dolor articular,Insulina 500mg
-173,Dermatitis 183,perdida de apetito;dolor articular;erupciones;diarrea,Paracetamol solucion oral
-174,Meningitis 31,mareo;dolor abdominal,Aciclovir solucion oral
-175,Cistitis 81,tos,Metformina comprimidos
-176,Hepatitis 856,diarrea;inflamacion;escalofrios;fiebre,Azitromicina 1g
-177,Cistitis 983,erupciones;nauseas,Insulina comprimidos
-178,Tuberculosis 782,dificultad para respirar,Omeprazol solucion oral
-179,Hepatitis 821,escalofrios;dolor de cabeza;tos;inflamacion,Insulina 1g
-180,Neumonia 529,nauseas;fiebre,Ibuprofeno 1g
-181,Dermatitis 361,dolor muscular;vomitos;tos;dolor articular,Cetirizina comprimidos
-182,Neumonia 26,inflamacion,Salbutamol solucion oral
-183,Bronquitis 877,mareo;tos;fiebre,Amoxicilina solucion oral
-184,Artritis 559,vomitos;dolor muscular,Omeprazol 1g
-185,Migrana 715,fiebre,Paracetamol 500mg
-186,Otitis 743,fatiga,Omeprazol comprimidos
-187,Migrana 38,dolor de cabeza;inflamacion,Ibuprofeno comprimidos
-188,Gripe 882,nauseas,Metformina comprimidos
-189,Bronquitis 508,fatiga;diarrea;erupciones;dolor abdominal,Insulina 1g
-190,Gastritis 670,fiebre,Amoxicilina 500mg
-191,Migrana 736,fiebre,Ibuprofeno 500mg
-192,Otitis 539,diarrea;dolor muscular,Amoxicilina comprimidos
-193,Asma 467,mareo;dolor de cabeza;erupciones;inflamacion,Prednisona comprimidos
-194,Sinusitis 97,nauseas,Omeprazol 1g
-195,Meningitis 304,escalofrios;dolor articular;dolor abdominal,Metformina 500mg
-196,Diabetes 59,fatiga;escalofrios;vomitos;dolor articular,Prednisona comprimidos
-197,Diabetes 518,nauseas;erupciones;escalofrios;vomitos,Aciclovir 1g
-198,Gripe 753,dolor de cabeza;dificultad para respirar;fatiga,Prednisona solucion oral
-199,Bronquitis 622,dolor muscular,Ibuprofeno 1g
+nombre,sintomas,medicamento
+Tuberculosis 891,erupciones;dolor articular,Amoxicilina solucion oral
+Tuberculosis 158,dolor articular;dolor muscular;fatiga,Metformina solucion oral
+Neumonia 421,perdida de apetito,Insulina 500mg
+Sinusitis 245,dolor muscular;tos;mareo;inflamacion,Cetirizina 500mg
+Bronquitis 744,fiebre,Amoxicilina solucion oral
+Neumonia 353,inflamacion;nauseas;diarrea,Amoxicilina 500mg
+Gripe 829,mareo;fatiga,Amoxicilina 500mg
+Gripe 784,dolor articular;inflamacion;fatiga;dolor de cabeza,Ibuprofeno 1g
+Migrana 286,mareo;fiebre;dolor articular;dolor de cabeza,Losartan solucion oral
+Covid-19 614,vomitos,Salbutamol 500mg
+Covid-19 462,fiebre;dolor articular,Insulina comprimidos
+Dermatitis 202,escalofrios;dolor articular;erupciones,Prednisona comprimidos
+Gastritis 80,inflamacion,Insulina 1g
+Tuberculosis 964,fatiga;perdida de apetito;dolor articular,Amoxicilina comprimidos
+Bronquitis 771,erupciones,Cetirizina comprimidos
+Dermatitis 880,diarrea;escalofrios;tos;inflamacion,Losartan 1g
+Gastritis 817,dificultad para respirar;dolor de cabeza;dolor articular;fatiga,Losartan comprimidos
+Artritis 15,perdida de apetito;fatiga,Cetirizina comprimidos
+Hepatitis 566,dolor articular,Amoxicilina 1g
+Hepatitis 430,dolor abdominal;inflamacion,Metformina 1g
+Migrana 188,dolor articular;fiebre,Amoxicilina 500mg
+Meningitis 970,fiebre,Insulina comprimidos
+Diabetes 18,dificultad para respirar,Omeprazol comprimidos
+Dermatitis 128,dificultad para respirar;erupciones,Omeprazol solucion oral
+Tuberculosis 15,fiebre;dolor articular;dolor muscular,Cetirizina 500mg
+Artritis 409,dolor de cabeza;diarrea;erupciones;tos,Salbutamol 500mg
+Otitis 929,dolor abdominal,Insulina solucion oral
+Hepatitis 777,mareo;dolor articular;escalofrios;dificultad para respirar,Ibuprofeno 1g
+Tuberculosis 473,dificultad para respirar;dolor articular;dolor de cabeza,Prednisona 500mg
+Covid-19 894,dolor articular;vomitos,Aciclovir 1g
+Asma 578,dificultad para respirar;dolor muscular;fatiga,Salbutamol solucion oral
+Cistitis 166,dolor de cabeza;inflamacion;escalofrios,Losartan solucion oral
+Artritis 844,dolor de cabeza;mareo;inflamacion,Insulina 500mg
+Diabetes 11,fiebre;dolor muscular;mareo,Metformina 1g
+Meningitis 429,erupciones;diarrea;tos,Amoxicilina solucion oral
+Hipertension 364,erupciones;dolor de cabeza;fiebre;dolor abdominal,Prednisona solucion oral
+Gripe 6,nauseas;vomitos,Prednisona solucion oral
+Asma 502,dolor de cabeza;diarrea;mareo,Azitromicina solucion oral
+Hipertension 646,dolor muscular;dolor articular,Insulina 1g
+Hepatitis 67,fiebre;dolor muscular;inflamacion,Salbutamol 1g
+Gripe 223,mareo;fatiga,Amoxicilina 500mg
+Diabetes 183,dolor de cabeza;inflamacion,Omeprazol solucion oral
+Asma 123,inflamacion;dolor muscular;mareo,Cetirizina 500mg
+Bronquitis 350,tos,Azitromicina solucion oral
+Bronquitis 681,fiebre,Omeprazol 500mg
+Bronquitis 998,inflamacion,Prednisona 1g
+Migrana 417,dolor muscular;dificultad para respirar;nauseas,Amoxicilina solucion oral
+Hepatitis 803,inflamacion,Ibuprofeno 1g
+Psoriasis 150,perdida de apetito;tos,Aciclovir 1g
+Otitis 479,dolor de cabeza,Ibuprofeno solucion oral
+Artritis 978,erupciones;diarrea,Losartan 500mg
+Hepatitis 436,escalofrios;dificultad para respirar;tos,Prednisona comprimidos
+Tuberculosis 318,tos;dolor abdominal;nauseas;dolor articular,Omeprazol solucion oral
+Influenza 806,perdida de apetito;dolor abdominal,Prednisona 1g
+Migrana 148,nauseas,Insulina comprimidos
+Covid-19 48,dolor de cabeza;fatiga;nauseas;perdida de apetito,Salbutamol 500mg
+Migrana 801,dolor de cabeza;escalofrios;tos,Paracetamol 1g
+Gastritis 924,dolor abdominal;nauseas;dolor muscular;dolor de cabeza,Losartan 1g
+Diabetes 283,dolor articular;mareo;escalofrios,Prednisona 1g
+Bronquitis 200,erupciones,Losartan solucion oral
+Gastritis 79,mareo;nauseas,Insulina solucion oral
+Cistitis 786,mareo,Prednisona solucion oral
+Cistitis 517,tos;fiebre;mareo;dolor muscular,Cetirizina 1g
+Tuberculosis 448,fatiga;tos;erupciones,Salbutamol solucion oral
+Psoriasis 386,mareo;dolor abdominal;escalofrios,Azitromicina 500mg
+Covid-19 377,inflamacion;erupciones;nauseas;dolor articular,Paracetamol solucion oral
+Covid-19 651,nauseas;dolor abdominal;erupciones;inflamacion,Salbutamol 500mg
+Neumonia 311,escalofrios;erupciones,Prednisona comprimidos
+Covid-19 826,escalofrios;erupciones;nauseas,Salbutamol solucion oral
+Sinusitis 382,perdida de apetito;escalofrios;mareo,Prednisona 500mg
+Otitis 919,dolor muscular;dolor articular;diarrea;nauseas,Salbutamol 1g
+Gripe 131,mareo,Azitromicina comprimidos
+Sinusitis 875,perdida de apetito;vomitos;tos;dolor articular,Insulina 500mg
+Dermatitis 183,perdida de apetito;dolor articular;erupciones;diarrea,Paracetamol solucion oral
+Meningitis 31,mareo;dolor abdominal,Aciclovir solucion oral
+Cistitis 81,tos,Metformina comprimidos
+Hepatitis 856,diarrea;inflamacion;escalofrios;fiebre,Azitromicina 1g
+Cistitis 983,erupciones;nauseas,Insulina comprimidos
+Tuberculosis 782,dificultad para respirar,Omeprazol solucion oral
+Hepatitis 821,escalofrios;dolor de cabeza;tos;inflamacion,Insulina 1g
+Neumonia 529,nauseas;fiebre,Ibuprofeno 1g
+Dermatitis 361,dolor muscular;vomitos;tos;dolor articular,Cetirizina comprimidos
+Neumonia 26,inflamacion,Salbutamol solucion oral
+Bronquitis 877,mareo;tos;fiebre,Amoxicilina solucion oral
+Artritis 559,vomitos;dolor muscular,Omeprazol 1g
+Migrana 715,fiebre,Paracetamol 500mg
+Otitis 743,fatiga,Omeprazol comprimidos
+Migrana 38,dolor de cabeza;inflamacion,Ibuprofeno comprimidos
+Gripe 882,nauseas,Metformina comprimidos
+Bronquitis 508,fatiga;diarrea;erupciones;dolor abdominal,Insulina 1g
+Gastritis 670,fiebre,Amoxicilina 500mg
+Migrana 736,fiebre,Ibuprofeno 500mg
+Otitis 539,diarrea;dolor muscular,Amoxicilina comprimidos
+Asma 467,mareo;dolor de cabeza;erupciones;inflamacion,Prednisona comprimidos
+Sinusitis 97,nauseas,Omeprazol 1g
+Meningitis 304,escalofrios;dolor articular;dolor abdominal,Metformina 500mg
+Diabetes 59,fatiga;escalofrios;vomitos;dolor articular,Prednisona comprimidos
+Diabetes 518,nauseas;erupciones;escalofrios;vomitos,Aciclovir 1g
+Gripe 753,dolor de cabeza;dificultad para respirar;fatiga,Prednisona solucion oral
+Bronquitis 622,dolor muscular,Ibuprofeno 1g

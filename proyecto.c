@@ -84,6 +84,18 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, List* aux){
           ++contador2;
     }
 
+    FILE *archivoEnfermedades = open("data/enfermedades.csv", "r");
+    if (archivoEnfermedades == NULL){
+        perror("Error al abrir enfermedades");
+        return;
+    }
+
+    campos = leer_linea_csv(archivoEnfermedades, ',');
+    while((campos = leer_linea_csv(archivoEnfermedades, ',')) != NULL){
+        
+    }
+    fclose(archivoEnfermedades);
+
     return;
 }
 

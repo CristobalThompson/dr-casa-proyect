@@ -33,15 +33,12 @@ typedef struct{
 
 //FUNCIONES
 
-void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* pacientes, List* aux){
+void cargarMedicamentos(HashMap* medicamentos, char** campos){
     FILE *archivoMedicamentos = fopen("data/medicamentos.csv", "r");
     if (archivoMedicamentos == NULL){
         perror("Error al abrir medicamentos");
         return;
     }
-
-    char **campos;
-
     campos = leer_linea_csv(archivoMedicamentos, ',');
     int contador = 1;
     while((campos = leer_linea_csv(archivoMedicamentos, ',')) != NULL){
@@ -70,43 +67,32 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
         insertMap(medicamentos, strdup(medicamento->nombre), medicamento);
     }
     fclose(archivoMedicamentos);
-    int contador2 = 1;
-    Pair* waza = (Pair*) firstMap(medicamentos);
-    while(waza != NULL && contador2 <= 5){
-        Medicamento* pos = waza->value;
-        printf("Nodo del mapa\n");
-        printf("%s\n%s\n\n", pos->nombre, pos->descripcion);
-        for(char *sintoma = first_List(pos->sintomasCura); sintoma != NULL; 
-                sintoma = next_List(pos->sintomasCura)){
-                printf("sintoma: '%s'\n", sintoma);
-          }
-          printf("\n\n");
-          waza = (Pair*) nextMap(medicamentos);
-          ++contador2;
-    }
-    contador = 1;
+}
+
+void cargarEnfermedades(HashMap* enfermedades, char** campos){
     FILE *archivoEnfermedades = fopen("data/enfermedades.csv", "r");
     if (archivoEnfermedades == NULL){
         perror("Error al abrir enfermedades");
         return;
     }
-
+    int contador = 1;
     campos = leer_linea_csv(archivoEnfermedades, ',');
 
     Enfermedad* sano = malloc(sizeof(Enfermedad)); if (sano == NULL) exit(1);
     //-------------------------------copiar cadenas-------------------------------------
-    strncpy(enfermedad->nombre, "sano", sizeof(enfermedad->nombre) - 1);
-        enfermedad->nombre[sizeof(enfermedad->nombre) - 1] = '\0';
+    strncpy(sano->nombre, "sano", sizeof(sano->nombre) - 1);
+        sano->nombre[sizeof(sano->nombre) - 1] = '\0';
     
-    strncpy(enfermedad->cura, "Se encuentra sano!", sizeof(enfermedad->cura) - 1);
-    enfermedad->cura[sizeof(enfermedad->cura) - 1] = '\0';
+    strncpy(sano->cura, "Se encuentra sano!", sizeof(sano->cura) - 1);
+    sano->cura[sizeof(sano->cura) - 1] = '\0';
     //-------------------------------------FIN------------------------------------------
 
     insertMap(enfermedades, strdup("sano"), sano);
+
     while((campos = leer_linea_csv(archivoEnfermedades, ',')) != NULL){
         Enfermedad* enfermedad = malloc(sizeof(Enfermedad)); if (enfermedad == NULL) exit(1);
         enfermedad->enfermedadesAdj = create_List();
-        push_back(enfermedad->enfermedadesAdj, sano);
+        push_Back(enfermedad->enfermedadesAdj, sano);
 
         //-------------------------------copiar cadenas-------------------------------------
         strncpy(enfermedad->nombre, campos[0], sizeof(enfermedad->nombre) - 1);
@@ -130,7 +116,9 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
         insertMap(enfermedades, strdup(enfermedad->nombre), enfermedad);
     }
     fclose(archivoEnfermedades);
+}
 
+void cargarPacientes(HashMap* pacientes, HashMap* enfermedades, char** campos){
     FILE *archivoPacientes = fopen("data/pacientes.csv", "r");
     if (archivoPacientes == NULL){
         perror("Error al abrir enfermedades");
@@ -142,10 +130,69 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
     while((campos = leer_linea_csv(archivoPacientes, ',')) != NULL){
         
         Paciente* paciente = malloc(sizeof(Paciente)); if (paciente == NULL) exit(1);
+        //-------------------------------copiar cadenas-------------------------------------
+        strncpy(paciente->nombre, campos[1], sizeof(paciente->nombre) - 1);
+        paciente->nombre[sizeof(paciente->nombre) - 1] = '\0';
+        //-------------------------------------FIN------------------------------------------
 
+        paciente->id  = atoi(campos[0]);
+        paciente->enfermedad = NULL;
+        Pair* par = searchMap(enfermedades, strdup(campos[2]));
+        if (par != NULL) paciente->enfermedad = (Enfermedad *) par->value;
+        
+        insertMap(pacientes, strdup(paciente->nombre), paciente);
     }
     fclose(archivoPacientes);
-    return;
+}
+
+void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* pacientes, List* aux){
+    int contador = 1;
+    char **campos;
+
+    cargarMedicamentos(medicamentos, campos);
+
+    Pair* waza = (Pair*) firstMap(medicamentos);
+    while(waza != NULL && contador <= 5){
+        Medicamento* pos = waza->value;
+        printf("Nodo del mapa medicamentos\n");
+        printf("medicamento: %s\ndescripcion: %s\n\n", pos->nombre, pos->descripcion);
+        for(char *sintoma = first_List(pos->sintomasCura); sintoma != NULL; 
+                sintoma = next_List(pos->sintomasCura)){
+                printf("sintoma: '%s'\n", sintoma);
+          }
+          printf("\n\n");
+          waza = (Pair*) nextMap(medicamentos);
+          ++contador;
+    }
+
+    cargarEnfermedades(enfermedades, campos);
+
+    contador = 1;
+    waza = (Pair*) firstMap(enfermedades);
+    while(waza != NULL && contador <= 5){
+        Enfermedad* value = waza->value;
+        printf("Nodo del mapa enfermedades\n");
+        printf("enfermedad: %s\ncura: %s\n\n", value->nombre, value->cura);
+        for(char *sintoma = first_List(value->sintomas); sintoma != NULL; 
+                sintoma = next_List(value->sintomas)){
+                printf("sintoma: '%s'\n", sintoma);
+          }
+          printf("\n\n");
+          waza = (Pair*) nextMap(enfermedades);
+          ++contador;
+    }
+
+    cargarPacientes(pacientes, enfermedades, campos);
+
+    contador = 1;
+    waza = (Pair*) firstMap(pacientes);
+    while(waza != NULL && contador <= 5){
+        Paciente* value = waza->value;
+        printf("Nodo del mapa pacientes\n");
+        printf("nombre: %s\nEnfermedad: %s\n\n", value->nombre, value->enfermedad->nombre);
+        waza = (Pair*) nextMap(pacientes);
+        ++contador;
+    }
 }
 
 int main(){

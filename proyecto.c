@@ -91,9 +91,21 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, List* aux){
     }
 
     campos = leer_linea_csv(archivoEnfermedades, ',');
+
+    Enfermedad* sano = malloc(sizeof(Enfermedad)); if (sano == NULL) exit(1);
+    //-------------------------------copiar cadenas-------------------------------------
+    strncpy(enfermedad->nombre, "sano", sizeof(enfermedad->nombre) - 1);
+        enfermedad->nombre[sizeof(enfermedad->nombre) - 1] = '\0';
+    
+    strncpy(enfermedad->cura, "Se encuentra sano!", sizeof(enfermedad->cura) - 1);
+    enfermedad->cura[sizeof(enfermedad->cura) - 1] = '\0';
+    //-------------------------------------FIN------------------------------------------
+
+    insertMap(enfermedades, strdup("sano"), sano);
     while((campos = leer_linea_csv(archivoEnfermedades, ',')) != NULL){
         Enfermedad* enfermedad = malloc(sizeof(Enfermedad)); if (enfermedad == NULL) exit(1);
         enfermedad->enfermedadesAdj = create_List();
+        push_back(enfermedad->enfermedadesAdj, sano);
 
         //-------------------------------copiar cadenas-------------------------------------
         strncpy(enfermedad->nombre, campos[0], sizeof(enfermedad->nombre) - 1);

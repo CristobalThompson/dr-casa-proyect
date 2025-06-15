@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 #include "tdas/listasDobles.h"
 #include "tdas/hashmap.h"
 #include "tdas/extra.h"
@@ -33,6 +34,20 @@ typedef struct{
 
 //FUNCIONES
 
+int generarDias(){
+    int minDias = 2;
+    int maxDias = 10;
+
+    // Asegurar que la semilla se inicialice solo una vez
+    static int semillaInicializada = 0;
+    if (!semillaInicializada) {
+        srand(time(NULL));
+        semillaInicializada = 1;
+    }
+
+    return rand() % (maxDias - minDias + 1) + minDias;
+}
+
 void cargarMedicamentos(HashMap* medicamentos, char** campos, int debug){
     FILE *archivoMedicamentos = fopen("data/medicamentos.csv", "r");
     if (archivoMedicamentos == NULL){
@@ -58,15 +73,13 @@ void cargarMedicamentos(HashMap* medicamentos, char** campos, int debug){
         //-------------------------------------FIN------------------------------------------
 
         medicamento->sintomasCura = split_string(campos[2], ";");
-        if (debug){
-            if (contador <= 5) {
-                printf("[DEBUG] %s\n[DEBUG] %s\n\n", medicamento->nombre, medicamento->descripcion);
-                for(char *sintoma = first_List(medicamento->sintomasCura); sintoma != NULL; 
-                    sintoma = next_List(medicamento->sintomasCura)){
-                    printf("[DEBUG] sintoma: '%s'\n", sintoma);
-                }
-            printf("\n\n");
+        if (debug && contador <= 5){
+            printf("[DEBUG] %s\n[DEBUG] %s\n\n", medicamento->nombre, medicamento->descripcion);
+            for(char *sintoma = first_List(medicamento->sintomasCura); sintoma != NULL; 
+                sintoma = next_List(medicamento->sintomasCura)){
+                printf("[DEBUG] sintoma: '%s'\n", sintoma);
             }
+            printf("\n\n");
             contador++;
         }
 
@@ -112,15 +125,13 @@ void cargarEnfermedades(HashMap* enfermedades, char** campos, int debug){
         //-------------------------------------FIN------------------------------------------
 
         enfermedad->sintomas = split_string(campos[1], ";");
-        if (debug){
-            if (contador <= 5) {
-                printf("[DEBUG] %s\n[DEBUG] %s\n\n", enfermedad->nombre, enfermedad->cura);
-                for(char *sintoma = first_List(enfermedad->sintomas); sintoma != NULL; 
-                    sintoma = next_List(enfermedad->sintomas)){
-                    printf("[DEBUG] sintoma: '%s'\n", sintoma);
+        if (debug && contador <= 5){
+            printf("[DEBUG] %s\n[DEBUG] %s\n\n", enfermedad->nombre, enfermedad->cura);
+            for(char *sintoma = first_List(enfermedad->sintomas); sintoma != NULL; 
+                sintoma = next_List(enfermedad->sintomas)){
+                printf("[DEBUG] sintoma: '%s'\n", sintoma);
             }
             printf("\n\n");
-            }
             contador++;
         }
         insertMap(enfermedades, strdup(enfermedad->nombre), enfermedad);
@@ -141,6 +152,7 @@ void cargarPacientes(HashMap* pacientes, HashMap* enfermedades, char** campos, i
         puts("[DEBUG] Mostrando los primeros 5 pacientes del archivo");
         printf("\n");
     }
+
     while((campos = leer_linea_csv(archivoPacientes, ',')) != NULL){
         
         Paciente* paciente = malloc(sizeof(Paciente)); if (paciente == NULL) exit(1);
@@ -154,10 +166,14 @@ void cargarPacientes(HashMap* pacientes, HashMap* enfermedades, char** campos, i
         Pair* par = searchMap(enfermedades, strdup(campos[2]));
         if (par != NULL) paciente->enfermedad = (Enfermedad *) par->value;
         
-        if (debug){
-            if (contador <= 5)
-                printf("[DEBUG] %s\n[DEBUG] %s\n\n", paciente->nombre, paciente->enfermedad->nombre);
-            contador++;
+        //Agregar dias restantes con random
+        paciente->tiempoVida = generarDias();
+
+
+        if (debug && contador <= 5){
+            printf("[DEBUG] %d\n[DEBUG] %d\n", paciente->id, paciente->tiempoVida);
+            printf("[DEBUG] %s\n[DEBUG] %s\n\n", paciente->nombre, paciente->enfermedad->nombre);
+            contador++; 
         }
 
         insertMap(pacientes, strdup(paciente->nombre), paciente);
@@ -192,6 +208,7 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
     }
     
     cargarEnfermedades(enfermedades, campos, debug);
+
     if (debug) {
         puts("-----------------------------------------");
         contador = 1;
@@ -220,6 +237,7 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
         printf("[DEBUG] 5 primeros Nodos del mapa pacientes\n\n");
         while(waza != NULL && contador <= 5){
             Paciente* value = waza->value;
+            printf("[DEBUG] %d\n", value->id);
             printf("[DEBUG] nombre: %s\n[DEBUG] Enfermedad: %s\n\n", value->nombre, value->enfermedad->nombre);
             waza = (Pair*) nextMap(pacientes);
             ++contador;
@@ -234,7 +252,7 @@ int main(){
     HashMap* medicamentos = createMap(250);
     HashMap* sintomas = createMap(250);
     HashMap* pacientes = createMap(1000);
-    int debug = 0; //0 desactivado, 1 activado
+    int debug = 1; //0 desactivado, 1 activado
 
     char buffer[10];
     char opcion;

@@ -145,7 +145,7 @@ void cargarPacientes(HashMap* pacientes, HashMap* enfermedades, char** campos){
     fclose(archivoPacientes);
 }
 
-void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* pacientes, List* aux){
+void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* pacientes){
     int contador = 1;
     char **campos;
 
@@ -201,7 +201,6 @@ int main(){
     HashMap* medicamentos = createMap(250);
     HashMap* sintomas = createMap(250);
     HashMap* pacientes = createMap(1000);
-    List* listaAux = create_List();
 
     char buffer[10];
     char opcion;
@@ -215,7 +214,7 @@ int main(){
 
             case '1' :
                 //cargar datos
-                cargar_CSVS(enfermedades, medicamentos, pacientes, listaAux);
+                cargar_CSVS(enfermedades, medicamentos, pacientes);
                 break;
             case '2' :
                 //???

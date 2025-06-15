@@ -17,6 +17,7 @@ typedef struct{
 }Enfermedad;
 
 typedef struct{
+    char nombre[100];
     int id;
     int tiempoVida;
     Enfermedad* enfermedad;
@@ -131,11 +132,17 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
     fclose(archivoEnfermedades);
 
     FILE *archivoPacientes = fopen("data/pacientes.csv", "r");
+    if (archivoPacientes == NULL){
+        perror("Error al abrir enfermedades");
+        return;
+    }
 
     campos = leer_linea_csv(archivoPacientes, ',');
 
     while((campos = leer_linea_csv(archivoPacientes, ',')) != NULL){
-        break;
+        
+        Paciente* paciente = malloc(sizeof(Paciente)); if (paciente == NULL) exit(1);
+
     }
     fclose(archivoPacientes);
     return;

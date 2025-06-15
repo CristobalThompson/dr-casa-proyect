@@ -32,7 +32,7 @@ typedef struct{
 
 //FUNCIONES
 
-void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, List* aux){
+void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* pacientes, List* aux){
     FILE *archivoMedicamentos = fopen("data/medicamentos.csv", "r");
     if (archivoMedicamentos == NULL){
         perror("Error al abrir medicamentos");
@@ -130,6 +130,14 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, List* aux){
     }
     fclose(archivoEnfermedades);
 
+    FILE *archivoPacientes = fopen("data/pacientes.csv", "r");
+
+    campos = leer_linea_csv(archivoPacientes, ',');
+
+    while((campos = leer_linea_csv(archivoPacientes, ',')) != NULL){
+        break;
+    }
+    fclose(archivoPacientes);
     return;
 }
 
@@ -137,6 +145,8 @@ int main(){
 
     HashMap* enfermedades = createMap(250);
     HashMap* medicamentos = createMap(250);
+    HashMap* sintomas = createMap(250);
+    HashMap* pacientes = createMap(1000);
     List* listaAux = create_List();
 
     char buffer[10];
@@ -151,7 +161,7 @@ int main(){
 
             case '1' :
                 //cargar datos
-                cargar_CSVS(enfermedades, medicamentos, listaAux);
+                cargar_CSVS(enfermedades, medicamentos, pacientes, listaAux);
                 break;
             case '2' :
                 //???

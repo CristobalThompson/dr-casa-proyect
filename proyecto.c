@@ -88,7 +88,7 @@ void cargarMedicamentos(HashMap* medicamentos, char** campos, int debug){
     fclose(archivoMedicamentos);
 }
 
-void cargarEnfermedades(HashMap* enfermedades, char** campos, int debug){
+void cargarEnfermedades(HashMap* enfermedades, HashMap* sintomas, char** campos, int debug){
     FILE *archivoEnfermedades = fopen("data/enfermedades.csv", "r");
     if (archivoEnfermedades == NULL){
         perror("Error al abrir enfermedades");
@@ -100,7 +100,7 @@ void cargarEnfermedades(HashMap* enfermedades, char** campos, int debug){
     Enfermedad* sano = malloc(sizeof(Enfermedad)); if (sano == NULL) exit(1);
     //-------------------------------copiar cadenas-------------------------------------
     strncpy(sano->nombre, "sano", sizeof(sano->nombre) - 1);
-        sano->nombre[sizeof(sano->nombre) - 1] = '\0';
+    sano->nombre[sizeof(sano->nombre) - 1] = '\0';
     
     strncpy(sano->cura, "Se encuentra sano!", sizeof(sano->cura) - 1);
     sano->cura[sizeof(sano->cura) - 1] = '\0';
@@ -125,6 +125,18 @@ void cargarEnfermedades(HashMap* enfermedades, char** campos, int debug){
         //-------------------------------------FIN------------------------------------------
 
         enfermedad->sintomas = split_string(campos[1], ";");
+
+        for(char *sintoma = first_List(enfermedad->sintomas); sintoma != NULL; 
+                sintoma = next_List(enfermedad->sintomas)){
+                    Pair* nodo = searchMap(sintomas, strdup(sintoma));
+                    if (nodo == NULL){
+                        List* lista = create_List();
+                        push_Back(lista, enfermedad);
+                        insertMap(sintomas, strdup(sintoma), lista);
+                    }
+                    else push_Back(nodo->value, enfermedad);
+                }
+
         if (debug && contador <= 5){
             printf("[DEBUG] %s\n[DEBUG] %s\n\n", enfermedad->nombre, enfermedad->cura);
             for(char *sintoma = first_List(enfermedad->sintomas); sintoma != NULL; 
@@ -181,7 +193,7 @@ void cargarPacientes(HashMap* pacientes, HashMap* enfermedades, char** campos, i
     fclose(archivoPacientes);
 }
 
-void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* pacientes, int debug){
+void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* pacientes, HashMap* sintomas, int debug){
     int contador = 1;
     char **campos;
     Pair* waza;
@@ -207,7 +219,7 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
         puts("-----------------------------------------");
     }
     
-    cargarEnfermedades(enfermedades, campos, debug);
+    cargarEnfermedades(enfermedades, sintomas, campos, debug);
 
     if (debug) {
         puts("-----------------------------------------");
@@ -243,6 +255,23 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
             ++contador;
         }
         puts("-----------------------------------------");
+
+        contador = 1;
+        waza = (Pair*) firstMap(sintomas);
+        printf("[DEBUG] 5 primeros Nodos del mapa sintomas\n\n");
+        while(waza != NULL && contador <= 5){
+            int contador2 = 1;
+            Enfermedad* primer = first_List(waza->value);
+            printf("\n[DEBUG] Sintoma: %s\n\n", waza->key);
+            while(primer != NULL && contador2 <= 5){
+                printf("[DEBUG] enfermedad: %s\n[DEBUG] cura: %s\n\n", primer->nombre, primer->cura);
+                ++contador2;
+                primer = next_List(waza->value);
+            }
+            waza = (Pair*) nextMap(sintomas);
+            ++contador;
+        }
+        puts("-----------------------------------------");
     }
 }
 
@@ -266,7 +295,7 @@ int main(){
 
             case '1' :
                 //cargar datos
-                cargar_CSVS(enfermedades, medicamentos, pacientes, debug);
+                cargar_CSVS(enfermedades, medicamentos, pacientes, sintomas, debug);
                 printf("\nJuego Cargado correctamente!\n");
                 break;
             case '2' :

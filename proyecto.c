@@ -275,6 +275,10 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
     }
 }
 
+void juntarListas(List* origen, List* agregar){
+    return;
+}
+
 void crearGrafo(HashMap* enfermedades, HashMap* mapaSintomas){
     Pair* par = firstMap(enfermedades);
     while(par != NULL){

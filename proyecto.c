@@ -14,7 +14,7 @@ typedef struct{
     char nombre[100];
     List* sintomas;
     char cura[100];
-    List* enfermedadesAdj;
+    HashMap* enfermedadesAdj;
 }Enfermedad;
 
 typedef struct{
@@ -113,8 +113,8 @@ void cargarEnfermedades(HashMap* enfermedades, HashMap* sintomas, char** campos,
     }
     while((campos = leer_linea_csv(archivoEnfermedades, ',')) != NULL){
         Enfermedad* enfermedad = malloc(sizeof(Enfermedad)); if (enfermedad == NULL) exit(1);
-        enfermedad->enfermedadesAdj = create_List();
-        push_Back(enfermedad->enfermedadesAdj, sano);
+        enfermedad->enfermedadesAdj = createMap(250);
+        insertMap(enfermedad->enfermedadesAdj, strdup("sano"), sano);
 
         //-------------------------------copiar cadenas-------------------------------------
         strncpy(enfermedad->nombre, campos[0], sizeof(enfermedad->nombre) - 1);
@@ -275,10 +275,10 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
     }
 }
 
-void juntarListas(List* origen, List* agregar){
+void juntarListas(HashMap* origen, List* agregar){
     for (Enfermedad* dato = first_List(agregar); dato != NULL;
         dato = next_List(agregar)){
-            push_Back(origen, dato);
+            insertMap(origen, strdup(dato->nombre), dato);
         }
 }
 

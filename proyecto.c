@@ -275,6 +275,10 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
     }
 }
 
+void crearGrafo(HashMap* enfermedades, HashMap* sintomas){
+    return;
+}
+
 int main(){
 
     HashMap* enfermedades = createMap(250);
@@ -296,6 +300,7 @@ int main(){
             case '1' :
                 //cargar datos
                 cargar_CSVS(enfermedades, medicamentos, pacientes, sintomas, debug);
+                //crearGrafo(enfermedades, sintomas);
                 printf("\nJuego Cargado correctamente!\n");
                 break;
             case '2' :

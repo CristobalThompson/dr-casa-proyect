@@ -289,9 +289,9 @@ void crearGrafo(HashMap* enfermedades, HashMap* mapaSintomas){
         List* sintomas = nodo->sintomas;
         char* sintoma = (char *) first_List(sintomas);
         while(sintoma != NULL){
-            Pair* parDos = searchMap(mapaSintomas);
+            Pair* parDos = searchMap(mapaSintomas, strdup(sintoma));
             if (parDos != NULL){
-                List* AdjSintoma = parDos->value;
+                List* adjSintoma = parDos->value;
                 juntarListas(nodo->enfermedadesAdj, adjSintoma);
             }
             sintoma = (char *) next_List(sintomas);

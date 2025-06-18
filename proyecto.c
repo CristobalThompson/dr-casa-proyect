@@ -279,6 +279,10 @@ void crearGrafo(HashMap* enfermedades, HashMap* sintomas){
     return;
 }
 
+/*void generarNuevaEnfermedad(Paciente* p, HashMap* enfermedades){
+    return;
+}
+*/
 int main(){
 
     HashMap* enfermedades = createMap(250);

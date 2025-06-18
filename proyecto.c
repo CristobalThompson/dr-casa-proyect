@@ -275,7 +275,22 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
     }
 }
 
-void crearGrafo(HashMap* enfermedades, HashMap* sintomas){
+void crearGrafo(HashMap* enfermedades, HashMap* mapaSintomas){
+    Pair* par = firstMap(enfermedades);
+    while(par != NULL){
+        Enfermedad* nodo = par->value;
+        List* sintomas = nodo->sintomas;
+        char* sintoma = (char *) first_List(sintomas);
+        while(sintoma != NULL){
+            Pair* parDos = searchMap(mapaSintomasintomas);
+            if (parDos != NULL){
+                List* AdjSintoma = parDos->value;
+                //juntarListas(nodo->enfermedadesAdj, adjSintoma);
+            }
+            sintoma = (char *) next_List(sintomas);
+        }
+        par = (Pair *) nextMap(enfermedades);
+    }
     return;
 }
 

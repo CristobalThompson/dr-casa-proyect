@@ -156,6 +156,6 @@ Pair * nextMap(HashMap * map) {
 }
 
 //retornal el contenido total actual del mapa
-int size_Map(HashMap * map){
+long size_Map(HashMap * map){
     return map->size;
 }

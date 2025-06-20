@@ -154,3 +154,8 @@ Pair * nextMap(HashMap * map) {
     return NULL;
     
 }
+
+//retornal el contenido total actual del mapa
+int size_Map(HashMap * map){
+    return map->size;
+}

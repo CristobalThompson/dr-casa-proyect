@@ -31,4 +31,6 @@ Pair * nextMap(HashMap * table);
 
 void enlarge(HashMap * map);
 
+int size_Map(HashMap* map);
+
 #endif /* HashMap_h */

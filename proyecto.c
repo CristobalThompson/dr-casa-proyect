@@ -113,7 +113,7 @@ void cargarEnfermedades(HashMap* enfermedades, HashMap* sintomas, char** campos,
     }
     while((campos = leer_linea_csv(archivoEnfermedades, ',')) != NULL){
         Enfermedad* enfermedad = malloc(sizeof(Enfermedad)); if (enfermedad == NULL) exit(1);
-        enfermedad->enfermedadesAdj = createMap(250);
+        enfermedad->enfermedadesAdj = createMap(300);
         insertMap(enfermedad->enfermedadesAdj, strdup("sano"), sano);
 
         //-------------------------------copiar cadenas-------------------------------------
@@ -275,15 +275,27 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
     }
 }
 
-void juntarMaps(HashMap* origen, List* agregar, int debug, int cont){
+void juntarMaps(HashMap* origen, List* agregar, char* original ,int debug, int cont){
     if (debug && cont <= 5) puts("[DEBUG] mostrando primeros 5 vecinos");
     int contador = 1;
     for (Enfermedad* dato = first_List(agregar); dato != NULL;
         dato = next_List(agregar)){
+            if (strcmp(dato->nombre, original) == 0){
+                if (debug && contador <= 5 && cont <= 5) printf("[DEBUG] no se puede insertar el nodo original! '%s'\n", original);
+                continue;
+            }
+
             if (debug && contador <= 5 && cont <= 5){
                 printf("[DEBUG] vecino: %s\n", dato->nombre);
             }
-            insertMap(origen, strdup(dato->nombre), dato);
+            Pair* aux = searchMap(origen, strdup(dato->nombre));
+
+            if (aux == NULL) insertMap(origen, strdup(dato->nombre), dato);
+            else{
+                if (debug && contador <= 5 && cont <= 5){
+                    printf("[DEBUG] un nodo ya se encontraba dentro! '%s'\n", dato->nombre);
+                }
+            }
             ++contador;
         }
     if (debug && cont <= 5) printf("\n");
@@ -315,10 +327,13 @@ void crearGrafo(HashMap* enfermedades, HashMap* mapaSintomas, int debug){
             Pair* parDos = searchMap(mapaSintomas, strdup(sintoma));
             if (parDos != NULL){
                 List* adjSintoma = parDos->value;
-                juntarMaps(nodo->enfermedadesAdj, adjSintoma, debug, contador);
+                juntarMaps(nodo->enfermedadesAdj, adjSintoma, par->key,  debug, contador);
             }
             sintoma = (char *) next_List(sintomas);
+
         }
+        long totalMap = size_Map(nodo->enfermedadesAdj);
+        if (debug && contador <= 5) printf("[DEBUG] '%s' posee '%ld' vecinos\n", par->key, totalMap);
         if (debug && contador <= 5) printf("-----------------------------------------\n");
         par = (Pair *) nextMap(enfermedades);
         ++contador;

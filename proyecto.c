@@ -275,36 +275,53 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
     }
 }
 
-void juntarMaps(HashMap* origen, List* agregar){
+void juntarMaps(HashMap* origen, List* agregar, int debug, int cont){
+    if (debug && cont <= 5) puts("[DEBUG] mostrando primeros 5 vecinos");
+    int contador = 1;
     for (Enfermedad* dato = first_List(agregar); dato != NULL;
         dato = next_List(agregar)){
+            if (debug && contador <= 5 && cont <= 5){
+                printf("[DEBUG] vecino: %s\n", dato->nombre);
+            }
             insertMap(origen, strdup(dato->nombre), dato);
+            ++contador;
         }
+    if (debug && cont <= 5) printf("\n");
 }
 
-void crearGrafo(HashMap* enfermedades, HashMap* mapaSintomas){
+void crearGrafo(HashMap* enfermedades, HashMap* mapaSintomas, int debug){
     Pair* par = firstMap(enfermedades);
+    int contador = 1;
+    if (debug) puts("mostrando primeras 5 enfermedades conectadas con sus vecinos");
     while(par != NULL){
         Enfermedad* nodo = par->value;
 
         if (nodo == NULL || nodo->sintomas == NULL) {
-            printf("nodo: %s\n", par->key); //nodo sano es que se filtra aqui
+            if (debug) printf("[DEBUG] nodo: %s\n", par->key); //nodo sano es que se filtra aqui
             par = nextMap(enfermedades);
             continue;
         }
-        
-
         List* sintomas = nodo->sintomas;
+        int largo = size_List(sintomas);
         char* sintoma = (char *) first_List(sintomas);
+
+        if (debug && contador <= 5) {
+            printf("[DEBUG] Enfermedad actual actual: '%s'\n", par->key);
+            printf("[DEBUG] la enfermedad actual presenta '%d' sintomas\n\n", largo);
+        }
+
         while(sintoma != NULL){
+            if (debug && contador <= 5) printf("[DEBUG] se buscara enfermedades con sintoma '%s'\n", sintoma);
             Pair* parDos = searchMap(mapaSintomas, strdup(sintoma));
             if (parDos != NULL){
                 List* adjSintoma = parDos->value;
-                juntarMaps(nodo->enfermedadesAdj, adjSintoma);
+                juntarMaps(nodo->enfermedadesAdj, adjSintoma, debug, contador);
             }
             sintoma = (char *) next_List(sintomas);
         }
+        if (debug && contador <= 5) printf("-----------------------------------------\n");
         par = (Pair *) nextMap(enfermedades);
+        ++contador;
     }
     return;
 }
@@ -330,7 +347,7 @@ int main(){
             case '1' :
                 //cargar datos
                 cargar_CSVS(enfermedades, medicamentos, pacientes, sintomas, debug);
-                crearGrafo(enfermedades, sintomas);
+                crearGrafo(enfermedades, sintomas, debug);
                 printf("\nJuego Cargado correctamente!\n");
                 break;
             case '2' :

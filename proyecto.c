@@ -275,7 +275,7 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
     }
 }
 
-void juntarListas(HashMap* origen, List* agregar){
+void juntarMaps(HashMap* origen, List* agregar){
     for (Enfermedad* dato = first_List(agregar); dato != NULL;
         dato = next_List(agregar)){
             insertMap(origen, strdup(dato->nombre), dato);
@@ -286,13 +286,21 @@ void crearGrafo(HashMap* enfermedades, HashMap* mapaSintomas){
     Pair* par = firstMap(enfermedades);
     while(par != NULL){
         Enfermedad* nodo = par->value;
+
+        if (nodo == NULL || nodo->sintomas == NULL) {
+            printf("nodo: %s\n", par->key); //nodo sano es que se filtra aqui
+            par = nextMap(enfermedades);
+            continue;
+        }
+        
+
         List* sintomas = nodo->sintomas;
         char* sintoma = (char *) first_List(sintomas);
         while(sintoma != NULL){
             Pair* parDos = searchMap(mapaSintomas, strdup(sintoma));
             if (parDos != NULL){
                 List* adjSintoma = parDos->value;
-                juntarListas(nodo->enfermedadesAdj, adjSintoma);
+                juntarMaps(nodo->enfermedadesAdj, adjSintoma);
             }
             sintoma = (char *) next_List(sintomas);
         }
@@ -322,7 +330,7 @@ int main(){
             case '1' :
                 //cargar datos
                 cargar_CSVS(enfermedades, medicamentos, pacientes, sintomas, debug);
-                //crearGrafo(enfermedades, sintomas);
+                crearGrafo(enfermedades, sintomas);
                 printf("\nJuego Cargado correctamente!\n");
                 break;
             case '2' :

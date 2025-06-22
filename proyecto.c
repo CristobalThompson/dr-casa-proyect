@@ -341,6 +341,24 @@ void crearGrafo(HashMap* enfermedades, HashMap* mapaSintomas, int debug){
     return;
 }
 
+void mostrarPreMenu(){
+    printf("\n        ¡Bienvenido a Side Effect!\n");
+    printf("\nSeleccione su opción:\n");
+    printf("1) Cargar datos.\n");
+    printf("2) Jugar\n");
+    printf("3) Lore\n");
+    printf("4) Tutorial\n");
+    printf("5) Información del juego\n");
+}
+
+void mostrarMenu(){
+    printf("\n    Menu de opciones del jugador.\n");
+    printf("1) Nuevo paciente.\n");
+    printf("2) Revisar paciente.\n");
+    printf("3) Terminar partida.\n");
+    printf("4) Salir del juego.\n");
+}
+
 int main(){
 
     HashMap* enfermedades = createMap(250);
@@ -351,8 +369,40 @@ int main(){
 
     char buffer[10];
     char opcion;
+    // - - - - - - - - - - PRE MENU - - - - - - - - - 
     do{
-        //mostrarMenu();
+        mostrarPreMenu();
+        
+        fgets(buffer, sizeof(buffer), stdin);
+        sscanf(buffer, " %c", &opcion);
+
+        switch (opcion)
+        {
+        case '1':
+            //cargar datos
+            cargar_CSVS(enfermedades, medicamentos, pacientes, sintomas, debug);
+            crearGrafo(enfermedades, sintomas, debug);
+            printf("\nJuego Cargado correctamente!\n");
+            break;
+        case '2':
+            break;
+        case '3':
+            //funcion para mostrar lore
+            break;
+        case '4':
+            //funcion comenzar tutorial
+            break;
+        case '5':
+            //información del juego
+            break;
+        default:
+            printf("\n  Opcion invalida!\n");
+            break;
+        }
+    } while (opcion != '2');
+// - - - - - - - Menú - - - - - - - - - 
+    do{
+        mostrarMenu();
 
         fgets(buffer, sizeof(buffer), stdin);        // lee línea entera
         sscanf(buffer, " %c", &opcion);              // extrae primer caracter
@@ -360,31 +410,25 @@ int main(){
         switch(opcion){
 
             case '1' :
-                //cargar datos
-                cargar_CSVS(enfermedades, medicamentos, pacientes, sintomas, debug);
-                crearGrafo(enfermedades, sintomas, debug);
-                printf("\nJuego Cargado correctamente!\n");
+                //nuevo paciente
                 break;
             case '2' :
-                //???
+                //atender paciente
                 break;
             case '3' :
-                //???
+                //Terminar partida
                 break;
             case '4' :
-                //???
-                break;
-            case '5' :
                 //salir
                 break;
             default:
-                printf("Opción invalida!\n");
+                printf("\n  Opción invalida!\n");
                 break;
         }
 
         presioneTeclaParaContinuar();
 
-    }while(opcion != '5');
+    }while(opcion != '4');
 
     return 0;
 }

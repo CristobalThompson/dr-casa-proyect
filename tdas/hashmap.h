@@ -29,7 +29,7 @@ Pair * firstMap(HashMap * table);
 
 Pair * nextMap(HashMap * table);
 
-Pair * posMap(HashMap* table, long pos);
+Pair * posMap(HashMap* table, long pos, char* key);
 
 void enlarge(HashMap * map);
 

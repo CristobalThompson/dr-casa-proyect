@@ -156,12 +156,12 @@ Pair * nextMap(HashMap * map) {
 }
 
 
-Pair * posMap(HashMap* map, long pos){
+Pair * posMap(HashMap* map, long pos, char* key){
     long posicion = pos % map->capacity;
     long i = posicion;
     while(1){
         if (map->buckets[posicion] != NULL &&
-            map->buckets[posicion]->key != NULL){
+            map->buckets[posicion]->key != NULL && strcmp(map->buckets[posicion]->key, key) != 0){
                 map->current = posicion;
                 return map->buckets[posicion];
             }

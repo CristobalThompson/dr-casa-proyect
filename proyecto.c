@@ -539,21 +539,182 @@ void mostrarPreMenu(){
 void mostrarMenu(){
     printf("\n    Menu de opciones del jugador.\n");
     printf("1) Nuevo paciente.\n");
-    printf("2) Mostrar lista de pacientes.\n");
+    printf("2) Tomar medicamento.\n");
     printf("3) Revisar paciente.\n");
     printf("4) Terminar partida.\n");
     printf("5) Salir del juego.\n");
 }
 
-int main(){
+void menuPaciente(){
+    printf("\n  Menú paciente\n");
+    printf("1) Ver estado actual\n");
+    printf("2) Administrar medicamento\n");
+    printf("3) Atrás\n");
+}
 
+void estadoPaciente(Paciente* paciente){
+    char* sintomas;
+    printf("\n- - - Estado del paciente - - -\n");
+    printf("Nombre: %s\n",paciente->nombre);
+    printf("Sintomas: \n");
+    sintomas = first_List(paciente->enfermedad->sintomas);
+    while (sintomas != NULL){
+        printf("  %s\n",sintomas);
+        sintomas = next_List(paciente->enfermedad->sintomas);
+    }
+    printf("Tiempo de vida: %i dias.\n",paciente->tiempoVida);
+}
+
+void mostrarMedicamento(Medicamento* medicina){
+    char* sintoma = first_List(medicina->sintomasCura);
+    printf("Nombre: %s\n",medicina->nombre);
+    printf("Sintomas que cura:\n");
+    while(sintoma != NULL){
+        printf("    %s\n",sintoma);
+        sintoma = next_List(medicina->sintomasCura);
+    }
+}
+
+void seleccionarMedicamento(Paciente* paciente,List* inventario,Medicamento** medicini){
+    char opcion;
+    char buffer[10];
+
+    Medicamento* medicina = (Medicamento*)first_List(inventario);
+    if (medicina == NULL){
+        printf("No tieme medicamentos en su inventario!\n");
+        return;
+    }
+    unsigned int talla = size_List(inventario);
+    unsigned int contador = 0;
+    printf("\n    Seleccione el medicamento:\n");
+
+    do{
+        mostrarMedicamento(medicina);
+        
+        if (contador > 0) printf("a) Item anterior.\n");
+        if (contador < talla - 1) printf("d) Item siguiente.\n");
+        printf("w) Seleccionar.\n");
+        printf("s) Volver.\n");
+
+        fgets(buffer, sizeof(buffer), stdin);
+        sscanf(buffer, " %c", &opcion);
+
+        switch (opcion)
+        {
+        case 'a':
+            if (contador > 0) {
+                medicina = prev_List(inventario);
+                contador--;
+            }
+            else printf("Opcion no valida!\n");
+            break;
+        case 'd':
+            if (contador < talla - 1){
+                medicina = next_List(inventario);
+                contador++;
+            }
+            else printf("Opcion no valida!\n");
+            break;
+        case 'w':
+            *medicini = medicina;
+            return;
+        case 's':
+            //
+            medicini = NULL;
+            return;
+        default:
+            printf("Opcion no valida!\n");
+            break;
+        }
+    }while(opcion != 's');
+}
+
+void administrar(Paciente* paciente,HashMap* enfermedades,Medicamento* medicina,int debug){
+    if (strcmp(paciente->enfermedad->cura,medicina->nombre)== 0){//si es cura
+        paciente->enfermedad = (searchMap(enfermedades,"sano"))->value; //ahora es el nodo sano
+        printf("El paciente ha sido curado!\n");
+    }
+    else{
+        paciente->tiempoVida--;
+        //generar_nueva_enfermedad(paciente,debug);
+        printf("El paciente ha desarrollado una nueva enfermedad!\n");
+    }
+}
+
+void atender(HashMap* medicamentos,HashMap*enfermedades,List* pacientesActivos, List* inventario,int debug,int *esFinal){
+    if (*esFinal == 1){
+        printf("La partida ya termino.\n Revise sus estadisticas\n");
+        return;
+    }
+    Paciente* paciente;
+    Medicamento* medicina;
+    paciente = (Paciente*)(first_List(pacientesActivos));
+    if (paciente == NULL){
+        printf("No tiene pacientes en su lista!\n");
+        return;
+    }
+    
+    Enfermedad* nodoSano = (searchMap(enfermedades,"sano"))->value;
+
+    char opcion;
+    char buffer[10];
+    do{
+        menuPaciente();
+        fgets(buffer, sizeof(buffer), stdin);
+        sscanf(buffer, " %c", &opcion);
+
+        switch (opcion)
+        {
+        case '1':
+            estadoPaciente(paciente);
+            break;
+        case '2':
+            seleccionarMedicamento(paciente,inventario,&medicina);
+            if (medicina == NULL){
+                printf("No ha seleccionado una medicina!\n");
+            } 
+            else{
+                printf("%s",medicina->nombre);
+                administrar(paciente,enfermedades,medicina,debug);
+                //si está sano se saca de la lista.
+                if (paciente->enfermedad == nodoSano){
+                    pop_Front(pacientesActivos);
+                    paciente = first_List(pacientesActivos);
+                }
+                //si la vida es 0 termina el juego.
+                else{
+                    if (paciente->tiempoVida < 1){
+                        printf("El paciente ha muerto...\n");
+                        printf("Fin de la partida.\n");
+                        *esFinal = 1;
+                        return;
+                    }
+                }
+                //sino se continúa.
+            } 
+            //Si el paciente está sano, siguiente.
+            break;
+        case '3':
+            //atrás
+            break;
+        default:
+            printf("¡Opción no valida!");
+            break;
+        }
+    }while(opcion != '3');
+}
+
+int main(){
+    int esFinal = 0;
     HashMap* enfermedades = createMap(250);
     HashMap* medicamentos = createMap(250);
     HashMap* sintomas = createMap(250);
     HashMap* pacientes = createMap(1000);
     HashMap* mapaMedicamentoSintomas = createMap(250);
+    
     List* pacientesActivos = create_List(); // Crear lista de pacientes activos
     int debug = 0; //0 desactivado, 1 activado
+    List* inventario = create_List();
 
     char buffer[10];
     char opcion;
@@ -600,21 +761,23 @@ int main(){
         switch(opcion){
 
             case '1' :
-            // nuevo paciente
-            NuevoPaciente(pacientes, pacientesActivos, debug);
-            break;
-            case '2' :
-                mostrarPacientesActivos(pacientesActivos);
+                // nuevo paciente
+                NuevoPaciente(pacientes, pacientesActivos, debug);
+                break;
+            case '2' ://tomar medicamento
+                //tomar(inventario);
                 break;
             case '3' :
                 //atender paciente
+                mostrarPacientesActivos(pacientesActivos);
+                atender(medicamentos,enfermedades,pacientesActivos,inventario,debug,&esFinal);
                 break;
             case '4' :
                 //Terminar partida
+                //mostrarEstadisticasActuales(esFinal); //si es final debe mostrar las estadisticas.
                 break;
             case '5' :
                 //salir
-                break;
             default:
                 printf("\n  Opción invalida!\n");
                 break;
@@ -622,7 +785,7 @@ int main(){
 
         presioneTeclaParaContinuar();
 
-    }while(opcion != '4');
+    }while(opcion != '5');
 
     return 0;
 }

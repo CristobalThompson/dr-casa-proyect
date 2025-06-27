@@ -49,31 +49,34 @@ int generarDias(){
     return rand() % (maxDias - minDias + 1) + minDias;
 }
 
-void cargarMedicamentos(HashMap* medicamentos, char** campos, int debug){
+void cargarMedicamentos(HashMap* medicamentos, HashMap* mapaMedicamentoSintomas, char** campos, int debug){
     FILE *archivoMedicamentos = fopen("data/medicamentos.csv", "r");
     if (archivoMedicamentos == NULL){
         perror("Error al abrir medicamentos");
         return;
     }
+
     campos = leer_linea_csv(archivoMedicamentos, ',');
     int contador = 1;
+
     if (debug) {
         puts("[DEBUG] Mostrando los primeros 5 medicamentos del archivo");
         printf("\n");
     }
-    while((campos = leer_linea_csv(archivoMedicamentos, ',')) != NULL){
-        
-        Medicamento* medicamento = malloc(sizeof(Medicamento)); if (medicamento == NULL) exit(1);
 
-        //-------------------------------copiar cadenas-------------------------------------
+    while((campos = leer_linea_csv(archivoMedicamentos, ',')) != NULL){
+        Medicamento* medicamento = malloc(sizeof(Medicamento)); 
+        if (medicamento == NULL) exit(1);
+
+        // Copiar nombre y descripción
         strncpy(medicamento->nombre, campos[0], sizeof(medicamento->nombre) - 1);
         medicamento->nombre[sizeof(medicamento->nombre) - 1] = '\0';
 
         strncpy(medicamento->descripcion, campos[1], sizeof(medicamento->descripcion) - 1);
         medicamento->descripcion[sizeof(medicamento->descripcion) - 1] = '\0';
-        //-------------------------------------FIN------------------------------------------
 
         medicamento->sintomasCura = split_string(campos[2], ";");
+
         if (debug && contador <= 5){
             printf("[DEBUG] %s\n[DEBUG] %s\n\n", medicamento->nombre, medicamento->descripcion);
             for(char *sintoma = first_List(medicamento->sintomasCura); sintoma != NULL; 
@@ -85,7 +88,22 @@ void cargarMedicamentos(HashMap* medicamentos, char** campos, int debug){
         }
 
         insertMap(medicamentos, strdup(medicamento->nombre), medicamento);
+
+        // --- NUEVO BLOQUE PARA LLENAR mapaMedicamentoSintomas ---
+        for (char* sintoma = first_List(medicamento->sintomasCura); sintoma != NULL; sintoma = next_List(medicamento->sintomasCura)) {
+            Pair* par = searchMap(mapaMedicamentoSintomas, sintoma);
+            if (par == NULL) {
+                List* lista = create_List();
+                push_Back(lista, medicamento);
+                insertMap(mapaMedicamentoSintomas, strdup(sintoma), lista);
+            } else {
+                List* lista = (List*) par->value;
+                push_Back(lista, medicamento);
+            }
+        }
+        // ---------------------------------------------------------
     }
+
     fclose(archivoMedicamentos);
 }
 
@@ -194,14 +212,13 @@ void cargarPacientes(HashMap* pacientes, HashMap* enfermedades, char** campos, i
     fclose(archivoPacientes);
 }
 
-void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* pacientes, HashMap* sintomas, int debug){
+void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* pacientes, HashMap* sintomas, HashMap* mapaMedicamentoSintomas, int debug){
     int contador = 1;
     char **campos;
     Pair* waza;
     if (debug) puts("-----------------------------------------");
-    
-    cargarMedicamentos(medicamentos, campos, debug);
 
+    cargarMedicamentos(medicamentos, mapaMedicamentoSintomas, campos, debug);
     if (debug) {
         puts("-----------------------------------------");
         printf("[DEBUG] 5 primeros Nodos del mapa medicamentos\n\n");
@@ -487,8 +504,7 @@ void mostrarLore() {
     system("cls");  // Limpiar pantalla en Windows
     imprimirCinematica(lore, 28);  // Delay de 28 ms entre caracteres
 
-    printf("\nPresiona ENTER para continuar...");
-    getchar();  // Esperar ENTER
+    presioneTeclaParaContinuar();
 }
 
 
@@ -517,6 +533,7 @@ int main(){
     HashMap* medicamentos = createMap(250);
     HashMap* sintomas = createMap(250);
     HashMap* pacientes = createMap(1000);
+    HashMap* mapaMedicamentoSintomas = createMap(250);
     List* pacientesActivos = create_List(); // Crear lista de pacientes activos
     int debug = 0; //0 desactivado, 1 activado
 
@@ -533,7 +550,7 @@ int main(){
         {
         case '1':
             //cargar datos
-            cargar_CSVS(enfermedades, medicamentos, pacientes, sintomas, debug);
+            cargar_CSVS(enfermedades, medicamentos, pacientes, sintomas, mapaMedicamentoSintomas, debug);
             crearGrafo(enfermedades, sintomas, debug);
             printf("\nJuego Cargado correctamente!\n");
             break;
@@ -541,6 +558,7 @@ int main(){
             break;
         case '3':
             mostrarLore();
+            opcion = 0;
             break;
         case '4':
             //funcion comenzar tutorial
@@ -589,3 +607,4 @@ int main(){
 
     return 0;
 }
+

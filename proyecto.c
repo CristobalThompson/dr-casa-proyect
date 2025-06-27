@@ -376,7 +376,7 @@ void estadoPaciente(Paciente* paciente){
         printf("  %s\n",sintomas);
         sintomas = next_List(paciente->enfermedad->sintomas);
     }
-    printf("Tiempo de vida: %i dias.",paciente->tiempoVida);
+    printf("Tiempo de vida: %i dias.\n",paciente->tiempoVida);
 }
 
 void mostrarMedicamento(Medicamento* medicina){
@@ -385,10 +385,11 @@ void mostrarMedicamento(Medicamento* medicina){
     printf("Sintomas que cura:\n");
     while(sintoma != NULL){
         printf("    %s\n",sintoma);
+        sintoma = next_List(medicina->sintomasCura);
     }
 }
 
-void seleccionarMedicamento(Paciente* paciente,List* inventario,Medicamento* medicini){
+void seleccionarMedicamento(Paciente* paciente,List* inventario,Medicamento** medicini){
     char opcion;
     char buffer[10];
 
@@ -429,7 +430,7 @@ void seleccionarMedicamento(Paciente* paciente,List* inventario,Medicamento* med
             else printf("Opcion no valida!\n");
             break;
         case 'w':
-            medicini = medicina;
+            *medicini = medicina;
             return;
         case 's':
             //
@@ -442,11 +443,33 @@ void seleccionarMedicamento(Paciente* paciente,List* inventario,Medicamento* med
     }while(opcion != 's');
 }
 
-void atender(HashMap* medicamentos,HashMap* pacientes, List* inventario){
+void administrar(Paciente* paciente,HashMap* enfermedades,Medicamento* medicina,int debug){
+    if (strcmp(paciente->enfermedad->cura,medicina->nombre)== 0){//si es cura
+        paciente->enfermedad = (searchMap(enfermedades,"sano"))->value; //ahora es el nodo sano
+        printf("El paciente ha sido curado!\n");
+    }
+    else{
+        paciente->tiempoVida--;
+        //generar_nueva_enfermedad(paciente,debug);
+        printf("El paciente ha desarrollado una nueva enfermedad!\n");
+    }
+}
+
+void atender(HashMap* medicamentos,HashMap*enfermedades,List* pacientesActivos, List* inventario,int debug,int *esFinal){
+    if (*esFinal == 1){
+        printf("La partida ya termino.\n Revise sus estadisticas\n");
+        return;
+    }
     Paciente* paciente;
     Medicamento* medicina;
-    paciente = (Paciente*)(firstMap(pacientes)->value);
+    paciente = (Paciente*)(first_List(pacientesActivos));
+    if (paciente == NULL){
+        printf("No tiene pacientes en su lista!\n");
+        return;
+    }
     
+    Enfermedad* nodoSano = (searchMap(enfermedades,"sano"))->value;
+
     char opcion;
     char buffer[10];
     do{
@@ -460,13 +483,28 @@ void atender(HashMap* medicamentos,HashMap* pacientes, List* inventario){
             estadoPaciente(paciente);
             break;
         case '2':
-            seleccionarMedicamento(paciente,inventario,medicina);
+            seleccionarMedicamento(paciente,inventario,&medicina);
             if (medicina == NULL){
-                printf("NULO");
+                printf("No ha seleccionado una medicina!\n");
             } 
             else{
                 printf("%s",medicina->nombre);
-                //administrar(paciente,medicina);
+                administrar(paciente,enfermedades,medicina,debug);
+                //si está sano se saca de la lista.
+                if (paciente->enfermedad == nodoSano){
+                    pop_Front(pacientesActivos);
+                    paciente = first_List(pacientesActivos);
+                }
+                //si la vida es 0 termina el juego.
+                else{
+                    if (paciente->tiempoVida < 1){
+                        printf("El paciente ha muerto...\n");
+                        printf("Fin de la partida.\n");
+                        *esFinal = 1;
+                        return;
+                    }
+                }
+                //sino se continúa.
             } 
             //Si el paciente está sano, siguiente.
             break;
@@ -481,12 +519,13 @@ void atender(HashMap* medicamentos,HashMap* pacientes, List* inventario){
 }
 
 int main(){
-
+    int esFinal = 0;
     HashMap* enfermedades = createMap(250);
     HashMap* medicamentos = createMap(250);
     HashMap* sintomas = createMap(250);
     HashMap* pacientes = createMap(1000);
-    List* inventario;
+    List* inventario = create_List();
+    List* pacientesActivos = create_List();
     int debug = 1; //0 desactivado, 1 activado
 
     char buffer[10];
@@ -535,10 +574,10 @@ int main(){
                 //tomar(inventario);
                 break;
             case '2' ://atender paciente
-                atender(medicamentos,pacientes,inventario);
+                atender(medicamentos,enfermedades,pacientesActivos,inventario,debug,&esFinal);
                 break;
             case '3' ://Terminar partida
-                //mostrarEstadisticasActuales();
+                //mostrarEstadisticasActuales(esFinal); //si es final debe mostrar las estadisticas.
                 break;
             case '4' :
                 //Salir

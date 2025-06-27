@@ -341,6 +341,23 @@ void crearGrafo(HashMap* enfermedades, HashMap* mapaSintomas, int debug){
     return;
 }
 
+
+void generar_nueva_enfermedad(Paciente* paciente, int debug){
+    Enfermedad* actual = paciente->enfermedad;
+    long pos = rand();
+    Enfermedad* nueva = posMap(actual->enfermedadesAdj, pos, "sano");
+    
+    if (nueva != NULL) paciente->enfermedad = nueva;
+
+    if (debug){
+        printf("\n[DEBUG] Cambiando de enfermedad a una adyacente\n");
+        printf("[DEBUG] enfermedad actual '%s'\n", actual->nombre);
+        printf("[DEBUG] se genero el numero %d\n", pos);
+        if (nueva == NULL) printf("[DEBUG] NO EXISTE NUEVA ENFERMEDAD\n");
+        else printf("[DEBUG] nueva enfermedad '%s'\n", nueva->nombre);
+    }
+}
+
 void mostrarPreMenu(){
     printf("\n        ¡Bienvenido a Side Effect!\n");
     printf("\nSeleccione su opción:\n");

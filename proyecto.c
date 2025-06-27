@@ -362,7 +362,6 @@ void generar_nueva_enfermedad(Paciente* paciente, int debug){
 void NuevoPaciente(HashMap* pacientes, List* pacientesActivos, int debug) {
     if (pacientes == NULL || pacientesActivos == NULL) return;
 
-    // Limite de pacientes activos
     if (size_List(pacientesActivos) >= 10) {
         printf("\n¡Has alcanzado el limite de pacientes activos!\n");
         printf("Los pasillos del hospital estan llenos... ¡Atiende a alguien antes de recibir mas!\n");
@@ -374,27 +373,26 @@ void NuevoPaciente(HashMap* pacientes, List* pacientesActivos, int debug) {
         printf("No hay pacientes disponibles para agregar.\n");
         return;
     }
-    
+
     static int semillaInicializada = 0;
     if (!semillaInicializada) {
         srand(time(NULL));
         semillaInicializada = 1;
     }
-    
+
     long posicionAleatoria = rand() % totalPacientes;
     Pair* parActual = firstMap(pacientes);
     for (long i = 0; i < posicionAleatoria && parActual != NULL; i++) {
         parActual = nextMap(pacientes);
     }
-    
+
     if (parActual == NULL || parActual->value == NULL) {
         printf("Error al seleccionar paciente aleatorio.\n");
         return;
     }
-    
+
     Paciente* pacienteSeleccionado = (Paciente*) parActual->value;
 
-    // Evitar duplicados
     Paciente* actual = first_List(pacientesActivos);
     while (actual != NULL) {
         if (actual->id == pacienteSeleccionado->id) {
@@ -412,8 +410,6 @@ void NuevoPaciente(HashMap* pacientes, List* pacientesActivos, int debug) {
     printf("==========================================\n");
     printf("ID del paciente: %d\n", pacienteSeleccionado->id);
     printf("Nombre: %s\n", pacienteSeleccionado->nombre);
-    printf("Enfermedad actual: %s\n", 
-           pacienteSeleccionado->enfermedad ? pacienteSeleccionado->enfermedad->nombre : "Sin enfermedad");
 
     if (pacienteSeleccionado->enfermedad && pacienteSeleccionado->enfermedad->sintomas) {
         printf("Sintomas presentados:\n");
@@ -431,6 +427,7 @@ void NuevoPaciente(HashMap* pacientes, List* pacientesActivos, int debug) {
 }
 
 
+
 void mostrarPacientesActivos(List* pacientesActivos) {
     if (pacientesActivos == NULL || size_List(pacientesActivos) == 0) {
         printf("No hay pacientes activos.\n");
@@ -443,12 +440,23 @@ void mostrarPacientesActivos(List* pacientesActivos) {
     for (Paciente* paciente = first_List(pacientesActivos); paciente != NULL; 
          paciente = next_List(pacientesActivos)) {
         printf("%d. %s (ID: %d)\n", contador, paciente->nombre, paciente->id);
-        printf("   Enfermedad: %s\n", 
-               paciente->enfermedad ? paciente->enfermedad->nombre : "Sin enfermedad");
+        
+        if (paciente->enfermedad && paciente->enfermedad->sintomas) {
+            printf("   Sintomas:\n");
+            int num = 1;
+            for (char* sintoma = first_List(paciente->enfermedad->sintomas); 
+                 sintoma != NULL; 
+                 sintoma = next_List(paciente->enfermedad->sintomas)) {
+                printf("     %d. %s\n", num++, sintoma);
+            }
+        } else {
+            printf("   Sintomas: Ninguno\n");
+        }
+
         printf("   Dias restantes: %d\n\n", paciente->tiempoVida);
         contador++;
     }
-    
+
     printf("Total de pacientes activos: %d\n", size_List(pacientesActivos));
 }
 
@@ -463,9 +471,9 @@ void imprimirCinematica(const char* texto, unsigned int delayMilisegundos) {
 void mostrarLore() {
     const char* lore =
         "\n"
-        "Anio 2074...\n"
+        "Anio 2077...\n"
         "La humanidad sobrevive, pero la medicina ya no es la misma.\n"
-        "Enfermedades mutantes cambian de forma, se ocultan y engañan.\n"
+        "Enfermedades mutantes cambian de forma, se ocultan y enganian.\n"
         "Los sintomas ya no siguen reglas.\n"
         "Cada paciente es una combinacion unica, impredecible...\n\n"
         "SIDE EFFECT es la ultima esperanza.\n"
@@ -497,9 +505,10 @@ void mostrarPreMenu(){
 void mostrarMenu(){
     printf("\n    Menu de opciones del jugador.\n");
     printf("1) Nuevo paciente.\n");
-    printf("2) Revisar paciente.\n");
-    printf("3) Terminar partida.\n");
-    printf("4) Salir del juego.\n");
+    printf("2) Mostrar lista de pacientes.\n");
+    printf("3) Revisar paciente.\n");
+    printf("4) Terminar partida.\n");
+    printf("5) Salir del juego.\n");
 }
 
 int main(){
@@ -556,15 +565,17 @@ int main(){
             case '1' :
             // nuevo paciente
             NuevoPaciente(pacientes, pacientesActivos, debug);
-            mostrarPacientesActivos(pacientesActivos);
             break;
             case '2' :
-                //atender paciente
+                mostrarPacientesActivos(pacientesActivos);
                 break;
             case '3' :
-                //Terminar partida
+                //atender paciente
                 break;
             case '4' :
+                //Terminar partida
+                break;
+            case '5' :
                 //salir
                 break;
             default:

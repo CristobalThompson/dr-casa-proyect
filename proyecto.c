@@ -358,6 +358,100 @@ void generar_nueva_enfermedad(Paciente* paciente, int debug){
     }
 }
 
+void NuevoPaciente(HashMap* pacientes, List* pacientesActivos, int debug) {
+    if (pacientes == NULL || pacientesActivos == NULL) return;
+
+    // Limite de pacientes activos
+    if (size_List(pacientesActivos) >= 10) {
+        printf("\n¡Has alcanzado el limite de pacientes activos!\n");
+        printf("Los pasillos del hospital estan llenos... ¡Atiende a alguien antes de recibir mas!\n");
+        return;
+    }
+    
+    long totalPacientes = size_Map(pacientes);
+    if (totalPacientes == 0) {
+        printf("No hay pacientes disponibles para agregar.\n");
+        return;
+    }
+    
+    static int semillaInicializada = 0;
+    if (!semillaInicializada) {
+        srand(time(NULL));
+        semillaInicializada = 1;
+    }
+    
+    long posicionAleatoria = rand() % totalPacientes;
+    Pair* parActual = firstMap(pacientes);
+    for (long i = 0; i < posicionAleatoria && parActual != NULL; i++) {
+        parActual = nextMap(pacientes);
+    }
+    
+    if (parActual == NULL || parActual->value == NULL) {
+        printf("Error al seleccionar paciente aleatorio.\n");
+        return;
+    }
+    
+    Paciente* pacienteSeleccionado = (Paciente*) parActual->value;
+
+    // Evitar duplicados
+    Paciente* actual = first_List(pacientesActivos);
+    while (actual != NULL) {
+        if (actual->id == pacienteSeleccionado->id) {
+            printf("El paciente %s ya esta siendo atendido.\n", pacienteSeleccionado->nombre);
+            return;
+        }
+        actual = next_List(pacientesActivos);
+    }
+
+    push_Front(pacientesActivos, pacienteSeleccionado);
+    pacienteSeleccionado->tiempoVida = generarDias();
+
+    printf("\n==========================================\n");
+    printf("       NUEVO PACIENTE AGREGADO\n");
+    printf("==========================================\n");
+    printf("ID del paciente: %d\n", pacienteSeleccionado->id);
+    printf("Nombre: %s\n", pacienteSeleccionado->nombre);
+    printf("Enfermedad actual: %s\n", 
+           pacienteSeleccionado->enfermedad ? pacienteSeleccionado->enfermedad->nombre : "Sin enfermedad");
+
+    if (pacienteSeleccionado->enfermedad && pacienteSeleccionado->enfermedad->sintomas) {
+        printf("Sintomas presentados:\n");
+        int contadorSintomas = 1;
+        for (char* sintoma = first_List(pacienteSeleccionado->enfermedad->sintomas); 
+             sintoma != NULL; 
+             sintoma = next_List(pacienteSeleccionado->enfermedad->sintomas)) {
+            printf("  %d. %s\n", contadorSintomas, sintoma);
+            contadorSintomas++;
+        }
+    }
+
+    printf("Dias restantes de vida: %d\n", pacienteSeleccionado->tiempoVida);
+    printf("==========================================\n");
+}
+
+
+void mostrarPacientesActivos(List* pacientesActivos) {
+    if (pacientesActivos == NULL || size_List(pacientesActivos) == 0) {
+        printf("No hay pacientes activos.\n");
+        return;
+    }
+    
+    printf("\n=== PACIENTES ACTIVOS ===\n");
+    int contador = 1;
+    
+    for (Paciente* paciente = first_List(pacientesActivos); paciente != NULL; 
+         paciente = next_List(pacientesActivos)) {
+        printf("%d. %s (ID: %d)\n", contador, paciente->nombre, paciente->id);
+        printf("   Enfermedad: %s\n", 
+               paciente->enfermedad ? paciente->enfermedad->nombre : "Sin enfermedad");
+        printf("   Dias restantes: %d\n\n", paciente->tiempoVida);
+        contador++;
+    }
+    
+    printf("Total de pacientes activos: %d\n", size_List(pacientesActivos));
+}
+
+
 void mostrarPreMenu(){
     printf("\n        ¡Bienvenido a Side Effect!\n");
     printf("\nSeleccione su opción:\n");
@@ -382,7 +476,8 @@ int main(){
     HashMap* medicamentos = createMap(250);
     HashMap* sintomas = createMap(250);
     HashMap* pacientes = createMap(1000);
-    int debug = 1; //0 desactivado, 1 activado
+    List* pacientesActivos = create_List(); // Crear lista de pacientes activos
+    int debug = 0; //0 desactivado, 1 activado
 
     char buffer[10];
     char opcion;
@@ -427,8 +522,10 @@ int main(){
         switch(opcion){
 
             case '1' :
-                //nuevo paciente
-                break;
+            // nuevo paciente
+            NuevoPaciente(pacientes, pacientesActivos, debug);
+            mostrarPacientesActivos(pacientesActivos);
+            break;
             case '2' :
                 //atender paciente
                 break;

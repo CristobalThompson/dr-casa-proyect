@@ -353,10 +353,131 @@ void mostrarPreMenu(){
 
 void mostrarMenu(){
     printf("\n    Menu de opciones del jugador.\n");
-    printf("1) Nuevo paciente.\n");
+    printf("1) Tomar medicamento.\n");
     printf("2) Revisar paciente.\n");
     printf("3) Terminar partida.\n");
     printf("4) Salir del juego.\n");
+}
+
+void menuPaciente(){
+    printf("\n  Menú paciente\n");
+    printf("1) Ver estado actual\n");
+    printf("2) Administrar medicamento\n");
+    printf("3) Atrás\n");
+}
+
+void estadoPaciente(Paciente* paciente){
+    char* sintomas;
+    printf("\n- - - Estado del paciente - - -\n");
+    printf("Nombre: %s\n",paciente->nombre);
+    printf("Sintomas: \n");
+    sintomas = first_List(paciente->enfermedad->sintomas);
+    while (sintomas != NULL){
+        printf("  %s\n",sintomas);
+        sintomas = next_List(paciente->enfermedad->sintomas);
+    }
+    printf("Tiempo de vida: %i dias.",paciente->tiempoVida);
+}
+
+void mostrarMedicamento(Medicamento* medicina){
+    char* sintoma = first_List(medicina->sintomasCura);
+    printf("Nombre: %s\n",medicina->nombre);
+    printf("Sintomas que cura:\n");
+    while(sintoma != NULL){
+        printf("    %s\n",sintoma);
+    }
+}
+
+void seleccionarMedicamento(Paciente* paciente,List* inventario,Medicamento* medicini){
+    char opcion;
+    char buffer[10];
+
+    Medicamento* medicina = (Medicamento*)first_List(inventario);
+    if (medicina == NULL){
+        printf("No tieme medicamentos en su inventario!\n");
+        return;
+    }
+    unsigned int talla = size_List(inventario);
+    unsigned int contador = 0;
+    printf("\n    Seleccione el medicamento:\n");
+
+    do{
+        mostrarMedicamento(medicina);
+        
+        if (contador > 0) printf("a) Item anterior.\n");
+        if (contador < talla - 1) printf("d) Item siguiente.\n");
+        printf("w) Seleccionar.\n");
+        printf("s) Volver.\n");
+
+        fgets(buffer, sizeof(buffer), stdin);
+        sscanf(buffer, " %c", &opcion);
+
+        switch (opcion)
+        {
+        case 'a':
+            if (contador > 0) {
+                medicina = prev_List(inventario);
+                contador--;
+            }
+            else printf("Opcion no valida!\n");
+            break;
+        case 'd':
+            if (contador < talla - 1){
+                medicina = next_List(inventario);
+                contador++;
+            }
+            else printf("Opcion no valida!\n");
+            break;
+        case 'w':
+            medicini = medicina;
+            return;
+        case 's':
+            //
+            medicini = NULL;
+            return;
+        default:
+            printf("Opcion no valida!\n");
+            break;
+        }
+    }while(opcion != 's');
+}
+
+void atender(HashMap* medicamentos,HashMap* pacientes, List* inventario){
+    Paciente* paciente;
+    Medicamento* medicina;
+    paciente = (Paciente*)(firstMap(pacientes)->value);
+    
+    char opcion;
+    char buffer[10];
+    do{
+        menuPaciente();
+        fgets(buffer, sizeof(buffer), stdin);
+        sscanf(buffer, " %c", &opcion);
+
+        switch (opcion)
+        {
+        case '1':
+            estadoPaciente(paciente);
+            break;
+        case '2':
+            seleccionarMedicamento(paciente,inventario,medicina);
+            if (medicina == NULL){
+                printf("NULO");
+            } 
+            else{
+                printf("%s",medicina->nombre);
+                //administrar(paciente,medicina);
+            } 
+            //Si el paciente está sano, siguiente.
+            break;
+        case '3':
+            //atrás
+            break;
+        default:
+            printf("¡Opción no valida!");
+            break;
+        }
+    }while(opcion != '3');
 }
 
 int main(){
@@ -365,6 +486,7 @@ int main(){
     HashMap* medicamentos = createMap(250);
     HashMap* sintomas = createMap(250);
     HashMap* pacientes = createMap(1000);
+    List* inventario;
     int debug = 1; //0 desactivado, 1 activado
 
     char buffer[10];
@@ -409,17 +531,17 @@ int main(){
         
         switch(opcion){
 
-            case '1' :
-                //nuevo paciente
+            case '1': //tomar medicamento
+                //tomar(inventario);
                 break;
-            case '2' :
-                //atender paciente
+            case '2' ://atender paciente
+                atender(medicamentos,pacientes,inventario);
                 break;
-            case '3' :
-                //Terminar partida
+            case '3' ://Terminar partida
+                //mostrarEstadisticasActuales();
                 break;
             case '4' :
-                //salir
+                //Salir
                 break;
             default:
                 printf("\n  Opción invalida!\n");

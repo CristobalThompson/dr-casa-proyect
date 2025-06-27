@@ -155,6 +155,23 @@ Pair * nextMap(HashMap * map) {
     
 }
 
+
+Pair * posMap(HashMap* map, long pos){
+    long posicion = pos % map->capacity;
+    long i = posicion;
+    while(1){
+        if (map->buckets[posicion] != NULL &&
+            map->buckets[posicion]->key != NULL){
+                map->current = posicion;
+                return map->buckets[posicion];
+            }
+        
+        posicion = (posicion + 1) % map->capacity;
+        if (posicion == i) break;
+    }
+    return NULL;
+}
+
 //retornal el contenido total actual del mapa
 long size_Map(HashMap * map){
     return map->size;

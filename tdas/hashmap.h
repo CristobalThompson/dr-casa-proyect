@@ -29,6 +29,8 @@ Pair * firstMap(HashMap * table);
 
 Pair * nextMap(HashMap * table);
 
+Pair * posMap(HashMap* table, long pos);
+
 void enlarge(HashMap * map);
 
 long size_Map(HashMap* map);

@@ -507,6 +507,24 @@ void mostrarLore() {
     presioneTeclaParaContinuar();
 }
 
+void mostrarInfo() {
+    const char* info =
+        "\n"
+        "Side Effect es un minijuego donde asumes el rol de un doctor\n"
+        "en un mundo caotico, tratando de diagnosticar y curar pacientes\n"
+        "con enfermedades impredecibles.\n\n"
+        "Cada paciente tiene una enfermedad, sintomas aleatorios y pocos\n"
+        "dias de vida. Tu objetivo es aplicar el medicamento correcto antes\n"
+        "de que sea demasiado tarde.\n\n"
+        "El juego mezcla estrategia, humor y decisiones rapidas. No sigue\n"
+        "una logica medica real, sino que usa una red de enfermedades y\n"
+        "efectos secundarios inesperados para poner a prueba tu intuicion.\n\n"
+        "¿Podras curar a mas pacientes que tus amigos antes de que todo colapse?\n\n";
+
+    system("cls");
+    imprimirCinematica(info, 25);
+    presioneTeclaParaContinuar();
+}
 
 void mostrarPreMenu(){
     printf("\n        ¡Bienvenido a Side Effect!\n");
@@ -564,7 +582,8 @@ int main(){
             //funcion comenzar tutorial
             break;
         case '5':
-            //información del juego
+            mostrarInfo();
+            opcion = 0;
             break;
         default:
             printf("\n  Opcion invalida!\n");

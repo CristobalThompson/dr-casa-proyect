@@ -6,6 +6,7 @@
 #include "tdas/listasDobles.h"
 #include "tdas/hashmap.h"
 #include "tdas/extra.h"
+#include <windows.h>
 
 // Structs
 
@@ -451,6 +452,37 @@ void mostrarPacientesActivos(List* pacientesActivos) {
     printf("Total de pacientes activos: %d\n", size_List(pacientesActivos));
 }
 
+void imprimirCinematica(const char* texto, unsigned int delayMilisegundos) {
+    for (int i = 0; texto[i] != '\0'; i++) {
+        printf("%c", texto[i]);
+        fflush(stdout);
+        Sleep(delayMilisegundos);  // Sleep usa milisegundos en Windows
+    }
+}
+
+void mostrarLore() {
+    const char* lore =
+        "\n"
+        "Anio 2074...\n"
+        "La humanidad sobrevive, pero la medicina ya no es la misma.\n"
+        "Enfermedades mutantes cambian de forma, se ocultan y engañan.\n"
+        "Los sintomas ya no siguen reglas.\n"
+        "Cada paciente es una combinacion unica, impredecible...\n\n"
+        "SIDE EFFECT es la ultima esperanza.\n"
+        "Una clinica experimental donde cada diagnostico es una batalla\n"
+        "y cada tratamiento puede salvar una vida... o terminarla.\n\n"
+        "Explora sintomas. Conecta enfermedades. Encuentra la cura.\n"
+        "Pero recuerda...\n"
+        "No todos los efectos estan previstos.\n\n"
+        "          Bienvenido a SIDE EFFECT.\n\n";
+
+    system("cls");  // Limpiar pantalla en Windows
+    imprimirCinematica(lore, 28);  // Delay de 28 ms entre caracteres
+
+    printf("\nPresiona ENTER para continuar...");
+    getchar();  // Esperar ENTER
+}
+
 
 void mostrarPreMenu(){
     printf("\n        ¡Bienvenido a Side Effect!\n");
@@ -499,7 +531,7 @@ int main(){
         case '2':
             break;
         case '3':
-            //funcion para mostrar lore
+            mostrarLore();
             break;
         case '4':
             //funcion comenzar tutorial

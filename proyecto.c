@@ -9,10 +9,10 @@
 
 // - - - - - - - - ESTRUCTURAS - - - - - - - - - -
 
-
-
 /*================================================================================
-
+Struct utilizada para almacenar la información de un nodo enfermedad. La estructura
+contiene información relevante de una enfermedad y ademas un hashMap para las 
+enfermedades adyacentes para el grafo de enfermedades.
 ================================================================================*/
 typedef struct{
     char nombre[100];           //nombre de la enfermedad
@@ -22,7 +22,8 @@ typedef struct{
 }Enfermedad;
 
 /*================================================================================
-
+Struct utilizada para almacenar la información del paciente, asi como su nombre,
+tiempo de vida restante, su enfermedad y mas.
 ================================================================================*/
 typedef struct{
     char nombre[100];           //nombre del paciente
@@ -32,7 +33,9 @@ typedef struct{
 }Paciente;
 
 /*================================================================================
-
+Struct utilizada para almacenar la información de cada medicamento, contiene el
+nombre del medicamento, una breve descripción y una lista de sintomas que cura 
+dicho medicamento.
 ================================================================================*/
 typedef struct{
     char nombre[100];           //nombre del medicamento
@@ -47,10 +50,14 @@ typedef struct{
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+-----------------------------------GENERAR DIAS-----------------------------------
+FUNCIONALIDAD: Función la cual genera aleatoriamente entre los parametros
+asignados entre minimo y maximo posible, unn numero el cual indicara la cantidad
+de dias de vida que le quedan al paciente
 
-PARÁMETROS: 
+PARÁMETROS: Ninguno.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
 int generarDias(){
     int minDias = 2;
@@ -68,10 +75,16 @@ int generarDias(){
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+-------------------------------CARGAR MEDICAMENTOS--------------------------------
+FUNCIONALIDAD: Función dedicada a cargar todos los medicamentos del csv, 
+almacenando en cada struct de medicamento y posteriormente almacenarlos en ambos
+mapas de medicamentos.
 
-PARÁMETROS: 
+PARÁMETROS: 2 mapas Hash de medicamentos, un puntero doble de char y un valor
+entero el cual permite mostrar mensajes si es que esta activo.
+
+COMPLEJIDAD: o(n)
+            -n : cantidad de datos del csv
 ================================================================================*/
 void cargarMedicamentos(HashMap* medicamentos, HashMap* mapaMedicamentoSintomas, char** campos, int debug){
     FILE *archivoMedicamentos = fopen("data/medicamentos.csv", "r");
@@ -92,12 +105,13 @@ void cargarMedicamentos(HashMap* medicamentos, HashMap* mapaMedicamentoSintomas,
         Medicamento* medicamento = malloc(sizeof(Medicamento)); 
         if (medicamento == NULL) exit(1);
 
-        // Copiar nombre y descripción
+        //-------------------------------copiar cadenas-------------------------------------
         strncpy(medicamento->nombre, campos[0], sizeof(medicamento->nombre) - 1);
         medicamento->nombre[sizeof(medicamento->nombre) - 1] = '\0';
 
         strncpy(medicamento->descripcion, campos[1], sizeof(medicamento->descripcion) - 1);
         medicamento->descripcion[sizeof(medicamento->descripcion) - 1] = '\0';
+        //-------------------------------------FIN------------------------------------------
 
         medicamento->sintomasCura = split_string(campos[2], ";");
 
@@ -113,7 +127,6 @@ void cargarMedicamentos(HashMap* medicamentos, HashMap* mapaMedicamentoSintomas,
 
         insertMap(medicamentos, strdup(medicamento->nombre), medicamento);
 
-        // --- NUEVO BLOQUE PARA LLENAR mapaMedicamentoSintomas ---
         for (char* sintoma = first_List(medicamento->sintomasCura); sintoma != NULL; sintoma = next_List(medicamento->sintomasCura)) {
             Pair* par = searchMap(mapaMedicamentoSintomas, sintoma);
             if (par == NULL) {
@@ -125,7 +138,6 @@ void cargarMedicamentos(HashMap* medicamentos, HashMap* mapaMedicamentoSintomas,
                 push_Back(lista, medicamento);
             }
         }
-        // ---------------------------------------------------------
     }
 
     fclose(archivoMedicamentos);
@@ -133,10 +145,17 @@ void cargarMedicamentos(HashMap* medicamentos, HashMap* mapaMedicamentoSintomas,
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+-------------------------------CARGAR ENFERMEDADES--------------------------------
+FUNCIONALIDAD: Función dedicada a cargar todas las enfermedades del csv,
+almacenando en cada struct de enfermedad y posteriormente en ambos mapas
+ingresados.
 
-PARÁMETROS: 
+PARÁMETROS: 2 mapas Hash uno de enfermedades y el otro de sintomas, un puntero
+doble de char y un valor entero el cual permite mostrar mensajes si es que esta
+activo.
+
+COMPLEJIDAD: o(n)
+            -n : cantidad de datos del csv
 ================================================================================*/
 void cargarEnfermedades(HashMap* enfermedades, HashMap* sintomas, char** campos, int debug){
     FILE *archivoEnfermedades = fopen("data/enfermedades.csv", "r");
@@ -203,10 +222,16 @@ void cargarEnfermedades(HashMap* enfermedades, HashMap* sintomas, char** campos,
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+---------------------------------CARGAR PACIENTES---------------------------------
+FUNCIONALIDAD: Función dedicada a cargar todos los pacientes del csv, almacenando
+en cada struct de paciente y posteriormente almacenandolo en el mapa de pacientes.
 
-PARÁMETROS: 
+PARÁMETROS: 2 mapas Hash uno de pacientes y el otro el de enfermedades, un puntero
+doble de char y un valor entero el cual permite mostrar mensajes si es que esta
+activo.
+
+COMPLEJIDAD: o(n)
+            -n : cantidad de datos del csv
 ================================================================================*/
 void cargarPacientes(HashMap* pacientes, HashMap* enfermedades, char** campos, int debug){
     FILE *archivoPacientes = fopen("data/pacientes.csv", "r");
@@ -252,10 +277,18 @@ void cargarPacientes(HashMap* pacientes, HashMap* enfermedades, char** campos, i
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+---------------------------------CARGAR CSVS--------------------------------------
+FUNCIONALIDAD: Función la cual llama a las 3 funciones de carga y si el valor
+debug esta activo muestra los primeros 5 nodos de cada mapa.
 
-PARÁMETROS: 
+PARÁMETROS: mapas Hash de enfermedades, medicamentos, pacientes, sintomas y 
+medicamentos por sintomas ademas, un valor entero el cual permite mostrar mensajes 
+si es que esta activo.
+
+COMPLEJIDAD: o(n * m * p)
+            -n : cantidad de datos del csv enfermedades.
+            -m : cantidad de datos del csv medicamentos.
+            -p : cantidad de datos del csv pacientes.
 ================================================================================*/
 void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* pacientes, HashMap* sintomas, HashMap* mapaMedicamentoSintomas, int debug){
     int contador = 1;
@@ -340,10 +373,15 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+---------------------------------JUNTAR MAPS--------------------------------------
+FUNCIONALIDAD: Función la cual recorre toda la lista ingresada y cada elemento
+lo inserta en el mapa Hash ingresado.
 
-PARÁMETROS: 
+PARÁMETROS: Un mapa Hash,, una lista enlazada, un puntero a char y 2 valores
+enteros, uno de contador y otro del debug.
+
+COMPLEJIDAD: o(n)
+            -n : cantidad de datos del csv
 ================================================================================*/
 void juntarMaps(HashMap* origen, List* agregar, char* original ,int debug, int cont){
     if (debug && cont <= 5) puts("[DEBUG] mostrando primeros 5 vecinos");
@@ -373,10 +411,17 @@ void juntarMaps(HashMap* origen, List* agregar, char* original ,int debug, int c
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+----------------------------------CREAR GRAFO-------------------------------------
+FUNCIONALIDAD: Genera el grafo de enfermedas, recorriendo cada enfermedad,
+conectandolo con enfermedades que compartan sintomas en comun.
 
-PARÁMETROS: 
+PARÁMETROS: Un mapa Hash de enfermedades, un mapa hash de enfermedades por sintomas
+y un valor entero el cual permite mostrar mensajes si es que esta activo.
+
+COMPLEJIDAD: o(e * s * a)
+            -e : cantidad de enfermedades
+            -s : cantidad de sintomas por enfermedad
+            -a : cantidad de datos de cada lista de sintomas
 ================================================================================*/
 void crearGrafo(HashMap* enfermedades, HashMap* mapaSintomas, int debug){
     Pair* par = firstMap(enfermedades);
@@ -420,23 +465,28 @@ void crearGrafo(HashMap* enfermedades, HashMap* mapaSintomas, int debug){
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+-----------------------------GENERAR NUEVA ENFERMEDAD-----------------------------
+FUNCIONALIDAD: Funcion la cual toma al azar una enfermedad vecina de la enfermedad
+actual del paciente y actualiza la enfermedad del paciente a la nueva enfermedad
+si es posible.
 
-PARÁMETROS: 
+PARÁMETROS: un puntero a paciente y un valor entero el cual permite mostrar 
+mensajes si es que esta activo.
 ================================================================================*/
 void generar_nueva_enfermedad(Paciente* paciente, int debug){
     Enfermedad* actual = paciente->enfermedad;
     long pos = rand();
-    Enfermedad* nueva = (posMap(actual->enfermedadesAdj, pos, "sano"))->value;
-    
-    if (nueva != NULL) paciente->enfermedad = nueva;
+    Pair* par = (posMap(actual->enfermedadesAdj, pos, "sano"));
+    if (par != NULL) {
+        Enfermedad* nueva = (Enfermedad *) par->value;
+        paciente->enfermedad = nueva;
+    }
 
     if (debug){
         printf("\n[DEBUG] Cambiando de enfermedad a una adyacente\n");
         printf("[DEBUG] enfermedad actual '%s'\n", actual->nombre);
         printf("[DEBUG] se genero el numero %d\n", pos);
-        if (nueva == NULL) printf("[DEBUG] NO EXISTE NUEVA ENFERMEDAD\n");
+        if (par == NULL) printf("[DEBUG] NO EXISTE NUEVA ENFERMEDAD\n");
         else printf("[DEBUG] nueva enfermedad '%s'\n", nueva->nombre);
     }
 }

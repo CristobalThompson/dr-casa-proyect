@@ -81,3 +81,36 @@ Seleccionando la opción 1) Cargar datos desde el menú inicial, el juego lee la
 - data/pacientes.csv
 Se generarán conexiones entre enfermedades según síntomas compartidos, y se mostrará el mensaje:
 "Juego Cargado correctamente!"
+
+**Paso 2: Jugar**
+Seleccionando la opción 2) Jugar, comienza la partida principal.
+Se mostrará el menú con las siguientes acciones disponibles:
+
+1) Nuevo paciente:
+Se añade un nuevo paciente aleatorio a la lista de atención, con síntomas y una enfermedad. Si ya hay 10 pacientes activos, no se podrán agregar más.
+
+2) Tomar medicamento:
+Permite buscar un medicamento por síntoma. Se muestran los medicamentos disponibles y se puede agregar uno al inventario.
+
+3) Revisar paciente:
+Muestra los pacientes activos, sus síntomas y días restantes. Desde ahí se puede administrar un medicamento del inventario. Si la cura es correcta, el paciente se sana; si es incorrecta, pierde un día de vida y puede desarrollar una nueva enfermedad.
+
+4) Terminar partida:
+Finaliza la partida actual. Si un paciente muere, también se termina automáticamente.
+
+5) Salir del juego:
+Cierra el programa.
+
+**Paso 3: Lore e información**
+En el menú inicial también puedes acceder a:
+
+3) Lore: muestra una introducción narrativa del mundo caótico en el que se desarrolla el juego.
+
+5) Información del juego: explica las mecánicas básicas del sistema y el objetivo general.
+
+**Paso 4: Manejo de errores**
+Si el usuario selecciona una opción inválida en cualquier menú, se mostrará:
+"Opcion invalida!"
+Y se volverá automáticamente al menú anterior sin afectar el flujo del programa.
+
+## CONTRIBUCIONES

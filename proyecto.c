@@ -482,14 +482,13 @@ void generar_nueva_enfermedad(Paciente* paciente, int debug){
     if (par != NULL) {
         Enfermedad* nueva = (Enfermedad *) par->value;
         paciente->enfermedad = nueva;
-    }
-
-    if (debug){
-        printf("\n[DEBUG] Cambiando de enfermedad a una adyacente\n");
-        printf("[DEBUG] enfermedad actual '%s'\n", actual->nombre);
-        printf("[DEBUG] se genero el numero %d\n", pos);
-        if (par == NULL) printf("[DEBUG] NO EXISTE NUEVA ENFERMEDAD\n");
-        else printf("[DEBUG] nueva enfermedad '%s'\n", nueva->nombre);
+        if (debug){
+            printf("\n[DEBUG] Cambiando de enfermedad a una adyacente\n");
+            printf("[DEBUG] enfermedad actual '%s'\n", actual->nombre);
+            printf("[DEBUG] se genero el numero %ld\n", pos);
+            if (par == NULL) printf("[DEBUG] NO EXISTE NUEVA ENFERMEDAD\n");
+            else printf("[DEBUG] nueva enfermedad '%s'\n", nueva->nombre);
+        }
     }
 }
 
@@ -503,7 +502,11 @@ un valor entero el cual permite mostrar mensajes si es que esta activo.
 
 COMPLEJIDAD: o(1)
 ================================================================================*/
-void NuevoPaciente(HashMap* pacientes, List* pacientesActivos, int debug) {
+void NuevoPaciente(HashMap* pacientes, List* pacientesActivos, int debug, int esFinal) {
+    if (esFinal){
+        printf("\nLa partida ya termino.\nRevise sus estadisticas.\n\n");
+        return;
+    }
     if (pacientes == NULL || pacientesActivos == NULL) return;
 
     if (size_List(pacientesActivos) >= 10) {
@@ -896,7 +899,7 @@ void administrar(Paciente* paciente,HashMap* enfermedades,Medicamento* medicina,
 }
 
 
-c/*================================================================================
+/*================================================================================
 ------------------------------------ATENDER---------------------------------------
 FUNCIONALIDAD: Es la funcion que muestra el menú para atender al paciente y contiene
 las funciones para realizar dichas acciones del menú.
@@ -1106,7 +1109,7 @@ int main(){
 
             case '1' :
                 // nuevo paciente
-                NuevoPaciente(pacientes, pacientesActivos, debug);
+                NuevoPaciente(pacientes, pacientesActivos, debug, esFinal);
                 break;
             case '2' ://tomar medicamento
                 tomar(inventario,mapaMedicamentoSintomas,medicamentos,esFinal);

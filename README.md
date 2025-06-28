@@ -115,13 +115,11 @@ Y se volverá automáticamente al menú anterior sin afectar el flujo del progra
 
 ## CONTRIBUCIONES
 **Juan Atuesta:**
-- 1. Definió la función mostrarEstadisticasFinales.
+- 1. Definió la función NuevoPaciente.
 
 - 2. Definió la función mostrarLore.
 
 - 3. Definió la función tutorial.
-
-- 4. Definió la función NuevoPaciente.
 
 **Francisca Jorquera:**
 - 1. Definió las funciones mostrarPreMenu, mostrarMenu y menuPaciente.

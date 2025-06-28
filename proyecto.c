@@ -1122,7 +1122,6 @@ int main(){
             case '4' :
                 //Terminar partida
                 esFinal = 1;
-                //mostrarEstadisticasActuales(esFinal); //si es final debe mostrar las estadisticas.
                 break;
             case '5' :
                 //salir

@@ -114,3 +114,36 @@ Si el usuario selecciona una opción inválida en cualquier menú, se mostrará:
 Y se volverá automáticamente al menú anterior sin afectar el flujo del programa.
 
 ## CONTRIBUCIONES
+**Juan Atuesta:**
+- 1. Definió la función mostrarEstadisticasFinales.
+
+- 2. Definió la función mostrarLore.
+
+- 3. Definió la función tutorial.
+
+- 4. Definió la función NuevoPaciente.
+
+**Francisca Jorquera:**
+- 1. Definió las funciones mostrarPreMenu, mostrarMenu y menuPaciente.
+
+- 2. Definió la función estadoPaciente.
+
+- 3. Definió la función administrar.
+
+- 4. Definió la función tomar.
+
+**Millaray Rebolledo:**
+- 1. Definió la función mostrarInfo.
+
+- 2. Creó el README.
+
+- 3. Definió la función atender.
+
+**Cristóbal Thompson**
+- 1. Definió la función cargar_CSVS.
+
+- 2. Definió la función crearGrafo.
+
+- 3. Definió la función generar_nueva_enfermedad.
+
+- 4. Añadió los comentarios.

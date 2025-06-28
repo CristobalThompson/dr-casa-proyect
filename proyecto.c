@@ -7,33 +7,51 @@
 #include "tdas/hashmap.h"
 #include "tdas/extra.h"
 
-// Structs
+// - - - - - - - - ESTRUCTURAS - - - - - - - - - -
 
 
+
+/*================================================================================
+
+================================================================================*/
 typedef struct{
-    char nombre[100];
-    List* sintomas;
-    char cura[100];
-    HashMap* enfermedadesAdj;
+    char nombre[100];           //nombre de la enfermedad
+    List* sintomas;             //lista de sintomas de la enfermedad
+    char cura[100];             //cadena que indica el nombre del medicamento el cual cura la enfermedad
+    HashMap* enfermedadesAdj;   //enfermedades adyacentes a la enfermedad actual
 }Enfermedad;
 
+/*================================================================================
+
+================================================================================*/
 typedef struct{
-    char nombre[100];
-    int id;
-    int tiempoVida;
-    Enfermedad* enfermedad;
+    char nombre[100];           //nombre del paciente
+    int id;                     //ID del paciente
+    int tiempoVida;             //dias restantes de vida del paciente
+    Enfermedad* enfermedad;     //enfermedad que presenta el paciente
 }Paciente;
 
+/*================================================================================
+
+================================================================================*/
 typedef struct{
-    char nombre[100];
-    char descripcion[350];
-    List* sintomasCura;
+    char nombre[100];           //nombre del medicamento
+    char descripcion[350];      //descripción del medicamento
+    List* sintomasCura;         //lista de sintomas el cual cura el medicamento
 }Medicamento;
 
 
 
 //FUNCIONES
 
+
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 int generarDias(){
     int minDias = 2;
     int maxDias = 10;
@@ -48,6 +66,13 @@ int generarDias(){
     return rand() % (maxDias - minDias + 1) + minDias;
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void cargarMedicamentos(HashMap* medicamentos, HashMap* mapaMedicamentoSintomas, char** campos, int debug){
     FILE *archivoMedicamentos = fopen("data/medicamentos.csv", "r");
     if (archivoMedicamentos == NULL){
@@ -106,6 +131,13 @@ void cargarMedicamentos(HashMap* medicamentos, HashMap* mapaMedicamentoSintomas,
     fclose(archivoMedicamentos);
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void cargarEnfermedades(HashMap* enfermedades, HashMap* sintomas, char** campos, int debug){
     FILE *archivoEnfermedades = fopen("data/enfermedades.csv", "r");
     if (archivoEnfermedades == NULL){
@@ -169,6 +201,13 @@ void cargarEnfermedades(HashMap* enfermedades, HashMap* sintomas, char** campos,
     fclose(archivoEnfermedades);
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void cargarPacientes(HashMap* pacientes, HashMap* enfermedades, char** campos, int debug){
     FILE *archivoPacientes = fopen("data/pacientes.csv", "r");
     if (archivoPacientes == NULL){
@@ -211,6 +250,13 @@ void cargarPacientes(HashMap* pacientes, HashMap* enfermedades, char** campos, i
     fclose(archivoPacientes);
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* pacientes, HashMap* sintomas, HashMap* mapaMedicamentoSintomas, int debug){
     int contador = 1;
     char **campos;
@@ -292,6 +338,13 @@ void cargar_CSVS(HashMap* enfermedades, HashMap* medicamentos, HashMap* paciente
     }
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void juntarMaps(HashMap* origen, List* agregar, char* original ,int debug, int cont){
     if (debug && cont <= 5) puts("[DEBUG] mostrando primeros 5 vecinos");
     int contador = 1;
@@ -318,6 +371,13 @@ void juntarMaps(HashMap* origen, List* agregar, char* original ,int debug, int c
     if (debug && cont <= 5) printf("\n");
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void crearGrafo(HashMap* enfermedades, HashMap* mapaSintomas, int debug){
     Pair* par = firstMap(enfermedades);
     int contador = 1;
@@ -358,6 +418,13 @@ void crearGrafo(HashMap* enfermedades, HashMap* mapaSintomas, int debug){
     return;
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void generar_nueva_enfermedad(Paciente* paciente, int debug){
     Enfermedad* actual = paciente->enfermedad;
     long pos = rand();
@@ -374,6 +441,13 @@ void generar_nueva_enfermedad(Paciente* paciente, int debug){
     }
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void NuevoPaciente(HashMap* pacientes, List* pacientesActivos, int debug) {
     if (pacientes == NULL || pacientesActivos == NULL) return;
 
@@ -441,6 +515,13 @@ void NuevoPaciente(HashMap* pacientes, List* pacientesActivos, int debug) {
     printf("==========================================\n");
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void mostrarPacientesActivos(List* pacientesActivos) {
     if (pacientesActivos == NULL || size_List(pacientesActivos) == 0) {
         printf("No hay pacientes activos.\n");
@@ -473,6 +554,13 @@ void mostrarPacientesActivos(List* pacientesActivos) {
     printf("Total de pacientes activos: %d\n", size_List(pacientesActivos));
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 // Función para esperar una cantidad de milisegundos (portátil a todos los SO)
 void esperar_ms(unsigned int milisegundos) {
     clock_t inicio = clock(); // Captura el tiempo inicial
@@ -480,6 +568,13 @@ void esperar_ms(unsigned int milisegundos) {
     while ((clock() - inicio) * 1000 / CLOCKS_PER_SEC < milisegundos);
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 // Función que imprime texto como una cinemática, letra por letra
 void imprimirCinematica(const char* texto, unsigned int delayMilisegundos) {
     for (int i = 0; texto[i] != '\0'; i++) {
@@ -489,6 +584,13 @@ void imprimirCinematica(const char* texto, unsigned int delayMilisegundos) {
     }
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void mostrarLore() {
     const char* lore =
         "\n"
@@ -511,6 +613,13 @@ void mostrarLore() {
     presioneTeclaParaContinuar();
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void mostrarInfo() {
     const char* info =
         "\n"
@@ -530,6 +639,13 @@ void mostrarInfo() {
     presioneTeclaParaContinuar();
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void mostrarPreMenu(){
     printf("\n        ¡Bienvenido a Side Effect!\n");
     printf("\nSeleccione su opción:\n");
@@ -540,6 +656,13 @@ void mostrarPreMenu(){
     printf("5) Información del juego\n");
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void mostrarMenu(){
     printf("\n    Menu de opciones del jugador.\n");
     printf("1) Nuevo paciente.\n");
@@ -549,6 +672,13 @@ void mostrarMenu(){
     printf("5) Salir del juego.\n");
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void menuPaciente(){
     printf("\n  Menú paciente\n");
     printf("1) Ver estado actual\n");
@@ -556,6 +686,13 @@ void menuPaciente(){
     printf("3) Atrás\n");
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void estadoPaciente(Paciente* paciente){
     char* sintomas;
     printf("\n- - - Estado del paciente - - -\n");
@@ -569,6 +706,13 @@ void estadoPaciente(Paciente* paciente){
     printf("Tiempo de vida: %i dias.\n",paciente->tiempoVida);
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void mostrarMedicamento(Medicamento* medicina){
     char* sintoma = first_List(medicina->sintomasCura);
     printf("Nombre: %s\n",medicina->nombre);
@@ -579,6 +723,13 @@ void mostrarMedicamento(Medicamento* medicina){
     }
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void seleccionarMedicamento(Paciente* paciente,List* inventario,Medicamento** medicini){
     char opcion;
     char buffer[10];
@@ -634,6 +785,13 @@ void seleccionarMedicamento(Paciente* paciente,List* inventario,Medicamento** me
     }while(opcion != 's');
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void administrar(Paciente* paciente,HashMap* enfermedades,Medicamento* medicina,int debug){
     if (strcmp(paciente->enfermedad->cura,medicina->nombre)== 0){//si es cura
         paciente->enfermedad = (searchMap(enfermedades,"sano"))->value; //ahora es el nodo sano
@@ -646,6 +804,13 @@ void administrar(Paciente* paciente,HashMap* enfermedades,Medicamento* medicina,
     }
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void atender(HashMap* medicamentos,HashMap*enfermedades,List* pacientesActivos, List* inventario,int debug,int *esFinal){
     if (*esFinal == 1){
         printf("La partida ya termino.\n Revise sus estadisticas\n");
@@ -709,6 +874,13 @@ void atender(HashMap* medicamentos,HashMap*enfermedades,List* pacientesActivos, 
     }while(opcion != '3');
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 void tomar(List* inventario, HashMap* mapaMedicamentoSintomas,HashMap* medicamentos){
     //      buscar por sintoma
     char qSintoma[60];
@@ -753,6 +925,13 @@ void tomar(List* inventario, HashMap* mapaMedicamentoSintomas,HashMap* medicamen
     push_Front(inventario,laMedicina);
 }
 
+
+/*================================================================================
+--------------------------------LEER ESCENARIOS-----------------------------------
+FUNCIONALIDAD: 
+
+PARÁMETROS: 
+================================================================================*/
 int main(){
     int esFinal = 0;
     HashMap* enfermedades = createMap(250);
@@ -800,7 +979,7 @@ int main(){
             break;
         }
     } while (opcion != '2');
-// - - - - - - - Menú - - - - - - - - - 
+    // - - - - - - - Menú - - - - - - - - - 
     do{
         mostrarMenu();
 

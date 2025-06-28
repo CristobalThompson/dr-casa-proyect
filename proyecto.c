@@ -6,7 +6,6 @@
 #include "tdas/listasDobles.h"
 #include "tdas/hashmap.h"
 #include "tdas/extra.h"
-#include <windows.h>
 
 // Structs
 
@@ -477,11 +476,19 @@ void mostrarPacientesActivos(List* pacientesActivos) {
     printf("Total de pacientes activos: %d\n", size_List(pacientesActivos));
 }
 
+// Función para esperar una cantidad de milisegundos (portátil a todos los SO)
+void esperar_ms(unsigned int milisegundos) {
+    clock_t inicio = clock(); // Captura el tiempo inicial
+    // Espera activa hasta que haya pasado el tiempo indicado
+    while ((clock() - inicio) * 1000 / CLOCKS_PER_SEC < milisegundos);
+}
+
+// Función que imprime texto como una cinemática, letra por letra
 void imprimirCinematica(const char* texto, unsigned int delayMilisegundos) {
     for (int i = 0; texto[i] != '\0'; i++) {
-        printf("%c", texto[i]);
-        fflush(stdout);
-        Sleep(delayMilisegundos);  // Sleep usa milisegundos en Windows
+        printf("%c", texto[i]);      // Muestra un carácter
+        fflush(stdout);              // Asegura que se imprima inmediatamente
+        esperar_ms(delayMilisegundos); // Espera antes de mostrar el siguiente
     }
 }
 

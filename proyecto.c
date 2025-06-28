@@ -576,7 +576,8 @@ COMPLEJIDAD: o(n * s)
             -n : cantidad de datos de la lista
             -s : cantidad de sintomas
 ================================================================================*/
-void mostrarPacientesActivos(List* pacientesActivos) {
+void mostrarPacientesActivos(List* pacientesActivos,int esFinal) {
+    if (esFinal == 1)return;
     if (pacientesActivos == NULL || size_List(pacientesActivos) == 0) {
         printf("No hay pacientes activos.\n");
         return;
@@ -713,12 +714,12 @@ COMPLEJIDAD: o(1)
 ================================================================================*/
 void mostrarPreMenu(){
     printf("\n        ¡Bienvenido a Side Effect!\n");
-    printf("\nSeleccione su opción:\n");
+    printf("\nSeleccione su opcion:\n");
     printf("1) Cargar datos.\n");
     printf("2) Jugar\n");
     printf("3) Lore\n");
     printf("4) Tutorial\n");
-    printf("5) Información del juego\n");
+    printf("5) Informacion del juego\n");
 }
 
 
@@ -731,7 +732,9 @@ PARÁMETROS: Ninguno.
 COMPLEJIDAD: o(1)
 ================================================================================*/
 void mostrarMenu(){
-    printf("\n    Menu de opciones del jugador.\n");
+    printf("\n==========================================\n");
+    printf("      Menu de opciones del jugador.\n");
+    printf("==========================================\n");
     printf("1) Nuevo paciente.\n");
     printf("2) Tomar medicamento.\n");
     printf("3) Revisar paciente.\n");
@@ -749,10 +752,12 @@ PARÁMETROS: Ninguno.
 COMPLEJIDAD: o(1)
 ================================================================================*/
 void menuPaciente(){
-    printf("\n  Menú paciente\n");
+    printf("\n==========================================\n");
+    printf("            Menu paciente\n");
+    printf("==========================================\n");
     printf("1) Ver estado actual\n");
     printf("2) Administrar medicamento\n");
-    printf("3) Atrás\n");
+    printf("3) Atras\n");
 }
 
 
@@ -776,6 +781,7 @@ void estadoPaciente(Paciente* paciente){
         sintomas = next_List(paciente->enfermedad->sintomas);
     }
     printf("Tiempo de vida: %i dias.\n",paciente->tiempoVida);
+    printf("- - - - - - - - - - - - - - - - - - -\n");
 }
 
 
@@ -826,8 +832,8 @@ void seleccionarMedicamento(Paciente* paciente,List* inventario,Medicamento** me
     do{
         mostrarMedicamento(medicina);
         
-        if (contador > 0) printf("a) Item anterior.\n");
-        if (contador < talla - 1) printf("d) Item siguiente.\n");
+        if (contador > 0) printf("a) Anterior.\n");
+        if (contador < talla - 1) printf("d) Siguiente.\n");
         printf("w) Seleccionar.\n");
         printf("s) Volver.\n");
 
@@ -880,12 +886,12 @@ COMPLEJIDAD: o(1)
 void administrar(Paciente* paciente,HashMap* enfermedades,Medicamento* medicina,int debug){
     if (strcmp(paciente->enfermedad->cura,medicina->nombre)== 0){//si es cura
         paciente->enfermedad = (searchMap(enfermedades,"sano"))->value; //ahora es el nodo sano
-        printf("El paciente ha sido curado!\n");
+        printf("\nEl paciente ha sido curado!\n");
     }
     else{
         paciente->tiempoVida--;
         generar_nueva_enfermedad(paciente,debug);
-        printf("El paciente ha desarrollado una nueva enfermedad!\n");
+        printf("\nEl paciente ha desarrollado una nueva enfermedad!\n");
     }
 }
 
@@ -904,7 +910,7 @@ COMPLEJIDAD: o(1)
 ================================================================================*/
 void atender(HashMap* medicamentos,HashMap*enfermedades,List* pacientesActivos, List* inventario,int debug,int *esFinal){
     if (*esFinal == 1){
-        printf("La partida ya termino.\n Revise sus estadisticas\n");
+        printf("\nLa partida ya termino.\nRevise sus estadisticas\n");
         return;
     }
     Paciente* paciente;
@@ -935,7 +941,6 @@ void atender(HashMap* medicamentos,HashMap*enfermedades,List* pacientesActivos, 
                 printf("No ha seleccionado una medicina!\n");
             } 
             else{
-                printf("%s",medicina->nombre);
                 administrar(paciente,enfermedades,medicina,debug);
                 //si está sano se saca de la lista.
                 if (paciente->enfermedad == nodoSano){
@@ -945,7 +950,7 @@ void atender(HashMap* medicamentos,HashMap*enfermedades,List* pacientesActivos, 
                 //si la vida es 0 termina el juego.
                 else{
                     if (paciente->tiempoVida < 1){
-                        printf("El paciente ha muerto...\n");
+                        printf("\nEl paciente ha muerto...\n");
                         printf("Fin de la partida.\n");
                         *esFinal = 1;
                         return;
@@ -957,9 +962,9 @@ void atender(HashMap* medicamentos,HashMap*enfermedades,List* pacientesActivos, 
             break;
         case '3':
             //atrás
-            break;
+            return;
         default:
-            printf("¡Opción no valida!");
+            printf("¡Opcion no valida!");
             break;
         }
     }while(opcion != '3');
@@ -979,15 +984,19 @@ los nombres, (esfinal) entero que indica si la partida ya ha terminado.
 
 COMPLEJIDAD: o(1)
 ================================================================================*/
-void tomar(List* inventario, HashMap* mapaMedicamentoSintomas,HashMap* medicamentos){
+void tomar(List* inventario, HashMap* mapaMedicamentoSintomas,HashMap* medicamentos,int esFinal){
+    if (esFinal == 1){
+        printf("\nLa partida ya termino.\nRevise sus estadisticas.\n\n");
+        return;
+    }
+
     //      buscar por sintoma
     char qSintoma[60];
     char buffer[70];
 
-    printf("Ingrese el sintoma que desea curar.\n");
-    //fgets(buffer, sizeof(buffer), stdin);
+    printf("\nIngrese el sintoma que desea curar.\n");
     fgets(qSintoma, sizeof(qSintoma), stdin);
-    //sscanf(buffer, " %59s", &qSintoma);
+    
     qSintoma[strcspn(qSintoma, "\n")] = 0;  // elimina el \n
 
     Pair* par = searchMap(mapaMedicamentoSintomas,qSintoma);
@@ -1003,10 +1012,18 @@ void tomar(List* inventario, HashMap* mapaMedicamentoSintomas,HashMap* medicamen
     Medicamento* medicina = first_List(lista);
     while (medicina != NULL){
         printf("Nombre: %s\n",medicina->nombre);
+        printf("Descripcion: %s\n",medicina->descripcion);
+        printf("Sintomas:\n");
+        char* sintoma = first_List(medicina->sintomasCura);
+        while (sintoma != NULL){
+            printf("- %s\n",sintoma);
+            sintoma = next_List(medicina->sintomasCura);
+        }
+        printf("------------------------------------\n");
         medicina = next_List(lista);
     }
     //      ingresar el nombre del medicamento a añadir
-    printf("Ingrese el nombre del medicamento que desea añadir al inventario\n.");
+    printf("\nIngrese el nombre del medicamento que desea agregar al inventario.\n");
     //fgets(buffer, sizeof(buffer), stdin);
     fgets(qSintoma, sizeof(qSintoma), stdin);
     //sscanf(buffer, " %59s", &qSintoma);
@@ -1021,6 +1038,7 @@ void tomar(List* inventario, HashMap* mapaMedicamentoSintomas,HashMap* medicamen
     //      Se agrega el medicamento al inventario.
 
     push_Front(inventario,laMedicina);
+    printf("\nMedicamento agregado!\n");
 }
 
 
@@ -1091,11 +1109,11 @@ int main(){
                 NuevoPaciente(pacientes, pacientesActivos, debug);
                 break;
             case '2' ://tomar medicamento
-                tomar(inventario,mapaMedicamentoSintomas,medicamentos);
+                tomar(inventario,mapaMedicamentoSintomas,medicamentos,esFinal);
                 break;
             case '3' :
                 //atender paciente
-                mostrarPacientesActivos(pacientesActivos);
+                mostrarPacientesActivos(pacientesActivos,esFinal);
                 atender(medicamentos,enfermedades,pacientesActivos,inventario,debug,&esFinal);
                 break;
             case '4' :
@@ -1107,7 +1125,7 @@ int main(){
                 //salir
                 break;
             default:
-                printf("\n  Opción invalida!\n");
+                printf("\n  Opcion invalida!\n");
                 break;
         }
 

@@ -66,3 +66,18 @@ Finaliza la sesión de juego.
 Cierra el programa.
 
 ## PROBLEMAS CONOCIDOS
+- La lógica de búsqueda de pacientes o medicamentos puede fallar si hay diferencias menores en mayúsculas/minúsculas.
+- La partida no puede guardarse ni reanudarse: es completamente en tiempo real.
+
+## A MEJORAR
+- Implementar una interfaz de usuario más amigable.
+- Agregar un modo multijugador competitivo.
+
+## EJEMPLO DE USO
+**Paso 1: Cargar datos**
+Seleccionando la opción 1) Cargar datos desde el menú inicial, el juego lee la información desde los archivos CSV:
+- data/enfermedades.csv
+- data/medicamentos.csv
+- data/pacientes.csv
+Se generarán conexiones entre enfermedades según síntomas compartidos, y se mostrará el mensaje:
+"Juego Cargado correctamente!"

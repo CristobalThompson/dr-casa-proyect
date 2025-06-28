@@ -359,11 +359,10 @@ void crearGrafo(HashMap* enfermedades, HashMap* mapaSintomas, int debug){
     return;
 }
 
-
 void generar_nueva_enfermedad(Paciente* paciente, int debug){
     Enfermedad* actual = paciente->enfermedad;
     long pos = rand();
-    Enfermedad* nueva = posMap(actual->enfermedadesAdj, pos, "sano");
+    Enfermedad* nueva = (posMap(actual->enfermedadesAdj, pos, "sano"))->value;
     
     if (nueva != NULL) paciente->enfermedad = nueva;
 
@@ -442,8 +441,6 @@ void NuevoPaciente(HashMap* pacientes, List* pacientesActivos, int debug) {
     printf("Dias restantes de vida: %d\n", pacienteSeleccionado->tiempoVida);
     printf("==========================================\n");
 }
-
-
 
 void mostrarPacientesActivos(List* pacientesActivos) {
     if (pacientesActivos == NULL || size_List(pacientesActivos) == 0) {
@@ -582,6 +579,7 @@ void seleccionarMedicamento(Paciente* paciente,List* inventario,Medicamento** me
     Medicamento* medicina = (Medicamento*)first_List(inventario);
     if (medicina == NULL){
         printf("No tieme medicamentos en su inventario!\n");
+        *medicini = NULL;
         return;
     }
     unsigned int talla = size_List(inventario);
@@ -620,7 +618,7 @@ void seleccionarMedicamento(Paciente* paciente,List* inventario,Medicamento** me
             return;
         case 's':
             //
-            medicini = NULL;
+            *medicini = NULL;
             return;
         default:
             printf("Opcion no valida!\n");
@@ -636,7 +634,7 @@ void administrar(Paciente* paciente,HashMap* enfermedades,Medicamento* medicina,
     }
     else{
         paciente->tiempoVida--;
-        //generar_nueva_enfermedad(paciente,debug);
+        generar_nueva_enfermedad(paciente,debug);
         printf("El paciente ha desarrollado una nueva enfermedad!\n");
     }
 }
@@ -704,6 +702,50 @@ void atender(HashMap* medicamentos,HashMap*enfermedades,List* pacientesActivos, 
     }while(opcion != '3');
 }
 
+void tomar(List* inventario, HashMap* mapaMedicamentoSintomas,HashMap* medicamentos){
+    //      buscar por sintoma
+    char qSintoma[60];
+    char buffer[70];
+
+    printf("Ingrese el sintoma que desea curar.\n");
+    //fgets(buffer, sizeof(buffer), stdin);
+    fgets(qSintoma, sizeof(qSintoma), stdin);
+    //sscanf(buffer, " %59s", &qSintoma);
+    qSintoma[strcspn(qSintoma, "\n")] = 0;  // elimina el \n
+
+    Pair* par = searchMap(mapaMedicamentoSintomas,qSintoma);
+    if (par == NULL){
+        printf("Error en la busqueda. Quizas escribiste mal!\n");
+        return;
+    }
+    List* lista = par->value;
+    //      mostrar medicamentos que traen esos sintomas
+    printf("\n=============================\n");
+    printf("  Medicamentos disponibles:\n");
+    printf("=============================\n");
+    Medicamento* medicina = first_List(lista);
+    while (medicina != NULL){
+        printf("Nombre: %s\n",medicina->nombre);
+        medicina = next_List(lista);
+    }
+    //      ingresar el nombre del medicamento a añadir
+    printf("Ingrese el nombre del medicamento que desea añadir al inventario\n.");
+    //fgets(buffer, sizeof(buffer), stdin);
+    fgets(qSintoma, sizeof(qSintoma), stdin);
+    //sscanf(buffer, " %59s", &qSintoma);
+    qSintoma[strcspn(qSintoma, "\n")] = 0;  // elimina el \n
+    
+    Pair* otroPair = searchMap(medicamentos,qSintoma);
+    if (otroPair == NULL){
+        printf("Error en la busqueda. Quizas escribiste mal!\n");
+        return;
+    }
+    Medicamento* laMedicina = otroPair->value;
+    //      Se agrega el medicamento al inventario.
+
+    push_Front(inventario,laMedicina);
+}
+
 int main(){
     int esFinal = 0;
     HashMap* enfermedades = createMap(250);
@@ -765,7 +807,7 @@ int main(){
                 NuevoPaciente(pacientes, pacientesActivos, debug);
                 break;
             case '2' ://tomar medicamento
-                //tomar(inventario);
+                tomar(inventario,mapaMedicamentoSintomas,medicamentos);
                 break;
             case '3' :
                 //atender paciente
@@ -774,10 +816,12 @@ int main(){
                 break;
             case '4' :
                 //Terminar partida
+                esFinal = 1;
                 //mostrarEstadisticasActuales(esFinal); //si es final debe mostrar las estadisticas.
                 break;
             case '5' :
                 //salir
+                break;
             default:
                 printf("\n  Opción invalida!\n");
                 break;

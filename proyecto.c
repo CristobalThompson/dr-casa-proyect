@@ -1134,7 +1134,7 @@ int main(){
 
         presioneTeclaParaContinuar();
 
-    }while(opcion != '5');
+    }while(opcion != '5' && esFinal  != 1);
 
     return 0;
 }

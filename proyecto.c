@@ -472,6 +472,8 @@ si es posible.
 
 PARÁMETROS: un puntero a paciente y un valor entero el cual permite mostrar 
 mensajes si es que esta activo.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
 void generar_nueva_enfermedad(Paciente* paciente, int debug){
     Enfermedad* actual = paciente->enfermedad;
@@ -493,10 +495,13 @@ void generar_nueva_enfermedad(Paciente* paciente, int debug){
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+--------------------------------NUEVO PACIENTE------------------------------------
+FUNCIONALIDAD: Agrega un nuevo paciente al azar a la lista de pacientes activos.
 
-PARÁMETROS: 
+PARÁMETROS: Un mapa Hash de pacientes, una lista enlazada de pacientes activos y
+un valor entero el cual permite mostrar mensajes si es que esta activo.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
 void NuevoPaciente(HashMap* pacientes, List* pacientesActivos, int debug) {
     if (pacientes == NULL || pacientesActivos == NULL) return;
@@ -513,19 +518,15 @@ void NuevoPaciente(HashMap* pacientes, List* pacientesActivos, int debug) {
         return;
     }
 
-    static int semillaInicializada = 0;
-    if (!semillaInicializada) {
-        srand(time(NULL));
-        semillaInicializada = 1;
-    }
-
     long posicionAleatoria = rand() % totalPacientes;
-    Pair* parActual = firstMap(pacientes);
-    for (long i = 0; i < posicionAleatoria && parActual != NULL; i++) {
+    Pair* parActual = posMap(pacientes, posicionAleatoria, "a");
+    /*for (long i = 0; i < posicionAleatoria && parActual != NULL; i++) {
         parActual = nextMap(pacientes);
-    }
+    }*/
 
-    if (parActual == NULL || parActual->value == NULL) {
+
+
+    if (parActual == NULL && parActual->value == NULL) {
         printf("Error al seleccionar paciente aleatorio.\n");
         return;
     }
@@ -542,7 +543,6 @@ void NuevoPaciente(HashMap* pacientes, List* pacientesActivos, int debug) {
     }
 
     push_Front(pacientesActivos, pacienteSeleccionado);
-    pacienteSeleccionado->tiempoVida = generarDias();
 
     printf("\n==========================================\n");
     printf("       NUEVO PACIENTE AGREGADO\n");
@@ -567,10 +567,14 @@ void NuevoPaciente(HashMap* pacientes, List* pacientesActivos, int debug) {
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+----------------------------MOSTRAR PACIENTES ACTIVOS-----------------------------
+FUNCIONALIDAD: Muestra todo los pacientes de la lista de pacientes.
 
-PARÁMETROS: 
+PARÁMETROS: Una lista enlazada de pacientes.
+
+COMPLEJIDAD: o(n * s)
+            -n : cantidad de datos de la lista
+            -s : cantidad de sintomas
 ================================================================================*/
 void mostrarPacientesActivos(List* pacientesActivos) {
     if (pacientesActivos == NULL || size_List(pacientesActivos) == 0) {
@@ -606,12 +610,15 @@ void mostrarPacientesActivos(List* pacientesActivos) {
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+-----------------------------------ESPERAR MS-------------------------------------
+FUNCIONALIDAD: Función para esperar una cantidad de milisegundos 
+(portátil a todos los SO)
 
-PARÁMETROS: 
+PARÁMETROS: un entero sin signo que representa la cantidad de milisegundos para 
+el printf.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
-// Función para esperar una cantidad de milisegundos (portátil a todos los SO)
 void esperar_ms(unsigned int milisegundos) {
     clock_t inicio = clock(); // Captura el tiempo inicial
     // Espera activa hasta que haya pasado el tiempo indicado
@@ -621,11 +628,13 @@ void esperar_ms(unsigned int milisegundos) {
 
 /*================================================================================
 --------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+FUNCIONALIDAD: Función que imprime texto como una cinemática, letra por letra.
 
-PARÁMETROS: 
+PARÁMETROS: un puntero a char del texto, y un valor entero que indica la demora
+entre caracter y caracter.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
-// Función que imprime texto como una cinemática, letra por letra
 void imprimirCinematica(const char* texto, unsigned int delayMilisegundos) {
     for (int i = 0; texto[i] != '\0'; i++) {
         printf("%c", texto[i]);      // Muestra un carácter
@@ -636,10 +645,12 @@ void imprimirCinematica(const char* texto, unsigned int delayMilisegundos) {
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+----------------------------------MOSTRAR LORE------------------------------------
+FUNCIONALIDAD: Muestra el lore de nuestro programa.
 
-PARÁMETROS: 
+PARÁMETROS: Ninguno.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
 void mostrarLore() {
     const char* lore =
@@ -665,10 +676,12 @@ void mostrarLore() {
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+----------------------------------MOSTRAR INFO------------------------------------
+FUNCIONALIDAD: Muestra la información del juego.
 
-PARÁMETROS: 
+PARÁMETROS: Ninguno.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
 void mostrarInfo() {
     const char* info =
@@ -691,10 +704,12 @@ void mostrarInfo() {
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+---------------------------------MOSTRAR PRE MENU---------------------------------
+FUNCIONALIDAD: Muestra las opciones disponibles del pre menu.
 
-PARÁMETROS: 
+PARÁMETROS: Ninguno.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
 void mostrarPreMenu(){
     printf("\n        ¡Bienvenido a Side Effect!\n");
@@ -708,10 +723,12 @@ void mostrarPreMenu(){
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+----------------------------------MOSTRAR MENU------------------------------------
+FUNCIONALIDAD: Muestra las opciones disponibles del menu principal.
 
-PARÁMETROS: 
+PARÁMETROS: Ninguno.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
 void mostrarMenu(){
     printf("\n    Menu de opciones del jugador.\n");
@@ -724,10 +741,12 @@ void mostrarMenu(){
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+-----------------------------------MENU PACIENTE----------------------------------
+FUNCIONALIDAD: Muestra las opciones disponibles del menu del paciente.
 
-PARÁMETROS: 
+PARÁMETROS: Ninguno.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
 void menuPaciente(){
     printf("\n  Menú paciente\n");
@@ -738,10 +757,13 @@ void menuPaciente(){
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+----------------------------------ESTADO PACIENTE---------------------------------
+FUNCIONALIDAD: Muestra el estado del paciente actual, su nombre, sus sintomas y
+su tiempo de vida restante.
 
-PARÁMETROS: 
+PARÁMETROS: puntero de tipo paciente.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
 void estadoPaciente(Paciente* paciente){
     char* sintomas;
@@ -758,14 +780,18 @@ void estadoPaciente(Paciente* paciente){
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+------------------------------MOSTRAR MEDICAMENTO---------------------------------
+FUNCIONALIDAD: Muestra el medicamento ingresado, su nombre, su descripcion y sus
+sintomas que cura.
 
-PARÁMETROS: 
+PARÁMETROS: un puntero de tipo medicamento.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
 void mostrarMedicamento(Medicamento* medicina){
     char* sintoma = first_List(medicina->sintomasCura);
     printf("Nombre: %s\n",medicina->nombre);
+    printf("Descripcion: %s\n", medicina->descripcion);
     printf("Sintomas que cura:\n");
     while(sintoma != NULL){
         printf("    %s\n",sintoma);
@@ -775,10 +801,13 @@ void mostrarMedicamento(Medicamento* medicina){
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+------------------------------SELECCIONAR MEDICAMENTO-----------------------------
+FUNCIONALIDAD: Seleccionar un medicamento de la lista de medicamentos.
 
-PARÁMETROS: 
+PARÁMETROS: Un puntero de tipo paciente, una lista enlazada y una lista de
+medicamentos.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
 void seleccionarMedicamento(Paciente* paciente,List* inventario,Medicamento** medicini){
     char opcion;
@@ -786,7 +815,7 @@ void seleccionarMedicamento(Paciente* paciente,List* inventario,Medicamento** me
 
     Medicamento* medicina = (Medicamento*)first_List(inventario);
     if (medicina == NULL){
-        printf("No tieme medicamentos en su inventario!\n");
+        printf("No tienes medicamentos en su inventario!\n");
         *medicini = NULL;
         return;
     }
@@ -837,10 +866,16 @@ void seleccionarMedicamento(Paciente* paciente,List* inventario,Medicamento** me
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+-------------------------------------ADMINISTRAR----------------------------------
+FUNCIONALIDAD: Administra el medicamento al paciente, en caso de que sea el
+correcto el paciente se cura, en caso contrario cambia su enfermedad y le resta
+1 al contador de dias de vida restantes.
 
-PARÁMETROS: 
+PARÁMETROS: puntero de tipo paciente, un mapa Hash, un puntero de tipo medicamento
+y un valor entero el cual permite mostrar mensajes 
+si es que esta activo.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
 void administrar(Paciente* paciente,HashMap* enfermedades,Medicamento* medicina,int debug){
     if (strcmp(paciente->enfermedad->cura,medicina->nombre)== 0){//si es cura
@@ -855,11 +890,17 @@ void administrar(Paciente* paciente,HashMap* enfermedades,Medicamento* medicina,
 }
 
 
-/*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+c/*================================================================================
+------------------------------------ATENDER---------------------------------------
+FUNCIONALIDAD: Es la funcion que muestra el menú para atender al paciente y contiene
+las funciones para realizar dichas acciones del menú.
 
-PARÁMETROS: 
+PARÁMETROS: Mapa con los medicamentos, mapa con las enfermedades, lista con los
+pacientes para atender, lista con los medicamentos (inventario), valor entero 
+que permite mostrar mensajes si es que está activo, entero que indica si la 
+partida ya ha terminado.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
 void atender(HashMap* medicamentos,HashMap*enfermedades,List* pacientesActivos, List* inventario,int debug,int *esFinal){
     if (*esFinal == 1){
@@ -926,10 +967,17 @@ void atender(HashMap* medicamentos,HashMap*enfermedades,List* pacientesActivos, 
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+----------------------------------- TOMAR ----------------------------------------
+FUNCIONALIDAD: Función encargada de agregar medicamentos al inventario del jugador.
+Solicita el sintoma para buscar y mostrar los medicamentos que curan ese sintoma.
+Luego solicita el nombre del medicamento que desea agregar al inventario y los
+añade.
 
-PARÁMETROS: 
+PARÁMETROS: inventario del jugador, el mapa que contiene los medicamentos guardados
+según los sintomas y el mapa que contiene todos los medicamentos ordenado por 
+los nombres, (esfinal) entero que indica si la partida ya ha terminado.
+
+COMPLEJIDAD: o(1)
 ================================================================================*/
 void tomar(List* inventario, HashMap* mapaMedicamentoSintomas,HashMap* medicamentos){
     //      buscar por sintoma
@@ -977,10 +1025,10 @@ void tomar(List* inventario, HashMap* mapaMedicamentoSintomas,HashMap* medicamen
 
 
 /*================================================================================
---------------------------------LEER ESCENARIOS-----------------------------------
-FUNCIONALIDAD: 
+-------------------------------------MAIN-----------------------------------------
+FUNCIONALIDAD: Main del programa.
 
-PARÁMETROS: 
+PARÁMETROS: Ninguno.
 ================================================================================*/
 int main(){
     int esFinal = 0;
